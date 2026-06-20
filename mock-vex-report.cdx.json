@@ -1,0 +1,3843 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:5bcc5090-e85f-499d-83e5-97211909d65c",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-03-25T12:27:50Z",
+    "tools": [
+      {
+        "vendor": "VEX Agent",
+        "name": "vex-agent",
+        "version": "1.0.0"
+      }
+    ],
+    "authors": [
+      {
+        "name": "VEX Agent \u2014 Security Report"
+      }
+    ]
+  },
+  "vulnerabilities": [
+    {
+      "bom-ref": "73c6c464-d99c-41b8-880c-350e0da89af6",
+      "id": "CVE-2021-44228",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228"
+      },
+      "description": "Log4Shell: RCE via JNDI lookups in log messages",
+      "affects": [
+        {
+          "ref": "pkg:maven/log4j-core@pom.xml",
+          "versions": [
+            {
+              "version": "pom.xml",
+              "status": "unaffected",
+              "range": "< 2.15.0"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 10.0,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-jfh8-c2jp-hdwn",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-jfh8-c2jp-hdwn"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "b80fcfb9-2aa3-4c09-aaec-d9ee01d6261d",
+      "id": "CVE-2022-22965",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-22965"
+      },
+      "description": "Spring4Shell: RCE via data binding on JDK9+",
+      "affects": [
+        {
+          "ref": "pkg:maven/spring-webmvc@pom.xml",
+          "versions": [
+            {
+              "version": "pom.xml",
+              "status": "unaffected",
+              "range": "< 5.3.18"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-36p3-wjmg-h94x",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-36p3-wjmg-h94x"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "5eaf1606-a403-4db9-96f4-68747677027f",
+      "id": "CVE-2020-36518",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-36518"
+      },
+      "description": "Deeply nested arrays cause stack overflow \u2014 RCE possible",
+      "affects": [
+        {
+          "ref": "pkg:maven/jackson-databind@pom.xml",
+          "versions": [
+            {
+              "version": "pom.xml",
+              "status": "unaffected",
+              "range": "< 2.13.2.1"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.6,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-57j2-w4cx-9mjj",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-57j2-w4cx-9mjj"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "ca398286-75f5-4ecd-8427-0efc4e396881",
+      "id": "CVE-2023-34462",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-34462"
+      },
+      "description": "SslHandler native OOM/RCE on malformed TLS ClientHello",
+      "affects": [
+        {
+          "ref": "pkg:maven/netty@pom.xml",
+          "versions": [
+            {
+              "version": "pom.xml",
+              "status": "unaffected",
+              "range": "< 4.1.94.Final"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.4,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-6mjq-h674-j845",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-6mjq-h674-j845"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "d03de538-e9a9-488a-bb1b-2c4567d5e364",
+      "id": "CVE-2023-32681",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-32681"
+      },
+      "description": "Unintended leak of Proxy-Authorization header to destination server",
+      "affects": [
+        {
+          "ref": "pkg:pypi/requests@requirements.txt",
+          "versions": [
+            {
+              "version": "requirements.txt",
+              "status": "unaffected",
+              "range": "< 2.31.0"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-j8r2-6x86-q33q",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-j8r2-6x86-q33q"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "d61f6e30-9c27-4a3d-bf20-3cf7e011d8da",
+      "id": "CVE-2023-49083",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-49083"
+      },
+      "description": "NULL pointer dereference in PKCS12 parsing",
+      "affects": [
+        {
+          "ref": "pkg:pypi/cryptography@requirements.txt",
+          "versions": [
+            {
+              "version": "requirements.txt",
+              "status": "unaffected",
+              "range": "< 41.0.6"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-w7pp-m8wf-vj6r",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-w7pp-m8wf-vj6r"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "bf98871a-2c85-4565-a3c6-768366a7bfe1",
+      "id": "CVE-2021-23337",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23337"
+      },
+      "description": "Command injection via _.template",
+      "affects": [
+        {
+          "ref": "pkg:npm/lodash@package.json",
+          "versions": [
+            {
+              "version": "package.json",
+              "status": "unaffected",
+              "range": "< 4.17.21"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-35jh-r3h4-6jhm",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-35jh-r3h4-6jhm"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "25fa8252-3329-4e5b-812f-8cb1c07fd194",
+      "id": "CVE-2023-29017",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-29017"
+      },
+      "description": "Sandbox escape: host object prototype pollution via exception",
+      "affects": [
+        {
+          "ref": "pkg:npm/vm2@package.json",
+          "versions": [
+            {
+              "version": "package.json",
+              "status": "unaffected",
+              "range": "< 3.9.15"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-7jxr-cg7f-gpgv",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-7jxr-cg7f-gpgv"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "20518467-5889-44cd-9c50-df3aea9d88e9",
+      "id": "CVE-2024-21907",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-21907"
+      },
+      "description": "ReDoS and deserialisation of untrusted data",
+      "affects": [
+        {
+          "ref": "pkg:nuget/newtonsoft.json@arm.sln",
+          "versions": [
+            {
+              "version": "arm.sln",
+              "status": "unaffected",
+              "range": "< 13.0.1"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.5,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-5crp-9r3c-p9vr",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-5crp-9r3c-p9vr"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "92166b0d-d07c-43cb-a68a-39626275ecd0",
+      "id": "CVE-2022-44570",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-44570"
+      },
+      "description": "ReDoS via Content-Type / Accept headers",
+      "affects": [
+        {
+          "ref": "pkg:gem/rack@Gemfile.lock",
+          "versions": [
+            {
+              "version": "Gemfile.lock",
+              "status": "unaffected",
+              "range": "< 2.0.9.1"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-65f5-mfpf-vfhj",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-65f5-mfpf-vfhj"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "0a5ca2d7-f9d6-480c-97f9-c9cf6a79ad88",
+      "id": "CVE-2021-41495",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-41495"
+      },
+      "description": "NULL pointer dereference in ndarray calculations",
+      "affects": [
+        {
+          "ref": "pkg:pypi/numpy@requirements.txt",
+          "versions": [
+            {
+              "version": "requirements.txt",
+              "status": "unaffected",
+              "range": "< 1.22.0"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-f7c7-j99h-c22f",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-f7c7-j99h-c22f"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "2f3b6aef-bfce-46a6-b60a-791baad5a043",
+      "id": "CVE-2023-50447",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-50447"
+      },
+      "description": "Arbitrary code execution via crafted image in Imagepath.make()",
+      "affects": [
+        {
+          "ref": "pkg:pypi/pillow@requirements.txt",
+          "versions": [
+            {
+              "version": "requirements.txt",
+              "status": "unaffected",
+              "range": "< 10.2.0"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-3f63-hfp8-52jq",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-3f63-hfp8-52jq"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "635aa3d9-1dda-4ee5-a90c-b93aee7aafab",
+      "id": "CVE-2024-23334",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-23334"
+      },
+      "description": "Path traversal in static file handler",
+      "affects": [
+        {
+          "ref": "pkg:pypi/aiohttp@requirements.txt",
+          "versions": [
+            {
+              "version": "requirements.txt",
+              "status": "unaffected",
+              "range": "< 3.9.2"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-5h86-8mv2-5q98",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-5h86-8mv2-5q98"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "ca26a394-4409-491c-8abd-6188049753dd",
+      "id": "CVE-2022-24302",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-24302"
+      },
+      "description": "Race condition during private key file creation (0o666 mode)",
+      "affects": [
+        {
+          "ref": "pkg:pypi/paramiko@requirements.txt",
+          "versions": [
+            {
+              "version": "requirements.txt",
+              "status": "unaffected",
+              "range": "< 2.10.1"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.1,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-f8q4-jwww-x3wv",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-f8q4-jwww-x3wv"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "a09db329-1205-4d06-8126-40d261f0644b",
+      "id": "CVE-2023-45857",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-45857"
+      },
+      "description": "Cookie leak to third-party sites via XSRF-TOKEN header",
+      "affects": [
+        {
+          "ref": "pkg:npm/axios@package.json",
+          "versions": [
+            {
+              "version": "package.json",
+              "status": "unaffected",
+              "range": "< 1.6.0"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-wf5p-g6vw-rhxx",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-wf5p-g6vw-rhxx"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "1ae1fe8e-53e9-4882-8e8c-792578a66afd",
+      "id": "CVE-2022-25883",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-25883"
+      },
+      "description": "ReDoS via overly large version string",
+      "affects": [
+        {
+          "ref": "pkg:npm/semver@package.json",
+          "versions": [
+            {
+              "version": "package.json",
+              "status": "unaffected",
+              "range": "< 7.5.2"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-c2qf-rxjj-qqgw",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-c2qf-rxjj-qqgw"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "e38ef0e7-1339-41fe-bc2e-b1d4d4d0506e",
+      "id": "CVE-2024-29041",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-29041"
+      },
+      "description": "Path traversal vulnerability in express static middleware",
+      "affects": [
+        {
+          "ref": "pkg:npm/express@package.json",
+          "versions": [
+            {
+              "version": "package.json",
+              "status": "unaffected",
+              "range": "< 4.19.2"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-rv95-896h-c2vc",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-rv95-896h-c2vc"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "2b3f07aa-703d-4398-b16b-f98dead175c6",
+      "id": "CVE-2023-42282",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-42282"
+      },
+      "description": "Private IP detect bypass: SSRF risk via IPv4-mapped IPv6",
+      "affects": [
+        {
+          "ref": "pkg:npm/ip@package.json",
+          "versions": [
+            {
+              "version": "package.json",
+              "status": "unaffected",
+              "range": "< 2.0.1"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-78xj-cgh5-2h22",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-78xj-cgh5-2h22"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "eaa84033-d8bd-4e7d-8c32-48417aef8ecb",
+      "id": "CVE-2024-0056",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-0056"
+      },
+      "description": "MitM possible through TLS session resumption cache poisoning",
+      "affects": [
+        {
+          "ref": "pkg:nuget/microsoft.data.sqlclient@arm.sln",
+          "versions": [
+            {
+              "version": "arm.sln",
+              "status": "unaffected",
+              "range": "< 5.1.4"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-98g6-xh36-x9qr",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-98g6-xh36-x9qr"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "96d3e640-25d3-4608-bdb6-e7f6492bebb8",
+      "id": "CVE-2024-30105",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-30105"
+      },
+      "description": "Stack overflow via deeply nested JSON object deserialisation",
+      "affects": [
+        {
+          "ref": "pkg:nuget/system.text.json@arm.sln",
+          "versions": [
+            {
+              "version": "arm.sln",
+              "status": "unaffected",
+              "range": "< 8.0.4"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-hh2w-p6rv-4g7w",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-hh2w-p6rv-4g7w"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "d652de0a-7afe-4f89-9194-d1ce6fc44307",
+      "id": "CVE-2022-29181",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-29181"
+      },
+      "description": "XML injection via improper handling of nil element names",
+      "affects": [
+        {
+          "ref": "pkg:gem/nokogiri@Gemfile.lock",
+          "versions": [
+            {
+              "version": "Gemfile.lock",
+              "status": "unaffected",
+              "range": "< 1.13.6"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-xh29-r2w5-wx8m",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-xh29-r2w5-wx8m"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "4ffa0e3b-2d04-4cea-a287-ee8cc19f20e4",
+      "id": "CVE-2023-28120",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-28120"
+      },
+      "description": "XSS via sanitize helper when output is utf8_encode",
+      "affects": [
+        {
+          "ref": "pkg:gem/activesupport@Gemfile.lock",
+          "versions": [
+            {
+              "version": "Gemfile.lock",
+              "status": "unaffected",
+              "range": "< 7.0.4.3"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-pj73-v5mw-pm9j",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-pj73-v5mw-pm9j"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "5edec82e-cdb9-4dd9-bc98-c03f0ef693f4",
+      "id": "CVE-2023-44487",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-44487"
+      },
+      "description": "HTTP/2 Rapid Reset Attack (DDoS)",
+      "affects": [
+        {
+          "ref": "pkg:golang/golang.org/x/net@go.mod",
+          "versions": [
+            {
+              "version": "go.mod",
+              "status": "unaffected",
+              "range": "< 0.17.0"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-qppj-fm56-g6im",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-qppj-fm56-g6im"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "c3edc1a5-2bfd-4a35-82d2-b9167aac3fff",
+      "id": "CVE-2022-27191",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-27191"
+      },
+      "description": "Host key verification bypass in ssh client",
+      "affects": [
+        {
+          "ref": "pkg:golang/golang.org/x/crypto@go.mod",
+          "versions": [
+            {
+              "version": "go.mod",
+              "status": "unaffected",
+              "range": "< 0.0.0-20220314234659"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-8c26-wmh5-6g9v",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-8c26-wmh5-6g9v"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "0d68de86-7911-45b8-afd6-66b076d27bba",
+      "id": "CVE-2022-3715",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-3715"
+      },
+      "description": "Stack overflow on deeply nested serde_json::Value",
+      "affects": [
+        {
+          "ref": "pkg:cargo/serde_json@Cargo.lock",
+          "versions": [
+            {
+              "version": "Cargo.lock",
+              "status": "unaffected",
+              "range": "< 1.0.94"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.6,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-r7x9-g574-9jv7",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-r7x9-g574-9jv7"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "ad661305-e77e-4d70-8690-c7f7b6d015db",
+      "id": "CVE-2023-45803",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-45803"
+      },
+      "description": "Request body not stripped after redirect on HTTP 301 (GET\u2192POST)",
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3@requirements.txt",
+          "versions": [
+            {
+              "version": "requirements.txt",
+              "status": "unaffected",
+              "range": "< 2.0.7"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.2,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-g4mx-q9vg-27p4",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-g4mx-q9vg-27p4"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "5553b952-59ba-453d-9079-41207768cae7",
+      "id": "CVE-2021-41945",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-41945"
+      },
+      "description": "CRLF injection in URL path",
+      "affects": [
+        {
+          "ref": "pkg:pypi/httpx@requirements.txt",
+          "versions": [
+            {
+              "version": "requirements.txt",
+              "status": "unaffected",
+              "range": "< 0.23.0"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-h8pj-cxx2-jfg2",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-h8pj-cxx2-jfg2"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "c2d281f7-6e78-49b6-97df-701f061c4ed4",
+      "id": "CVE-2023-37920",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-37920"
+      },
+      "description": "Removal of root CA e-Tugra from bundle",
+      "affects": [
+        {
+          "ref": "pkg:pypi/certifi@requirements.txt",
+          "versions": [
+            {
+              "version": "requirements.txt",
+              "status": "unaffected",
+              "range": "< 2023.7.22"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-xqr8-7jwr-rhge",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-xqr8-7jwr-rhge"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "27f971de-6e0e-420c-ba95-3941040c707c",
+      "id": "CVE-2022-40898",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-40898"
+      },
+      "description": "ReDoS via crafted wheel filename",
+      "affects": [
+        {
+          "ref": "pkg:pypi/wheel@requirements.txt",
+          "versions": [
+            {
+              "version": "requirements.txt",
+              "status": "unaffected",
+              "range": "< 0.38.1"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-qwmp-2cf2-g9g6",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-qwmp-2cf2-g9g6"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "1db70cfc-8b83-4d15-852a-073287cd3bb9",
+      "id": "CVE-2022-24785",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-24785"
+      },
+      "description": "Path traversal via locale string",
+      "affects": [
+        {
+          "ref": "pkg:npm/moment@package.json",
+          "versions": [
+            {
+              "version": "package.json",
+              "status": "unaffected",
+              "range": "< 2.29.2"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-8hfj-j24r-96c4",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-8hfj-j24r-96c4"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "6b9ce262-de10-4d87-bdf1-9d7e3c935c45",
+      "id": "CVE-2022-3517",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-3517"
+      },
+      "description": "ReDoS via crafted glob pattern",
+      "affects": [
+        {
+          "ref": "pkg:npm/minimatch@package.json",
+          "versions": [
+            {
+              "version": "package.json",
+              "status": "unaffected",
+              "range": "< 3.0.5"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-f8q4-j684-j9v5",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-f8q4-j684-j9v5"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "c5007147-34f5-494c-9f35-fdadfc281e6b",
+      "id": "CVE-2022-25881",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-25881"
+      },
+      "description": "ReDoS via malformed Cache-Control header",
+      "affects": [
+        {
+          "ref": "pkg:npm/http-cache-semantics@package.json",
+          "versions": [
+            {
+              "version": "package.json",
+              "status": "unaffected",
+              "range": "< 4.1.1"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-rc47-6667-2j5j",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-rc47-6667-2j5j"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "162153cd-f153-4507-a024-4f5dcc37e9da",
+      "id": "CVE-2023-26115",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-26115"
+      },
+      "description": "ReDoS via crafted string",
+      "affects": [
+        {
+          "ref": "pkg:npm/word-wrap@package.json",
+          "versions": [
+            {
+              "version": "package.json",
+              "status": "unaffected",
+              "range": "< 1.2.4"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-j8xg-fqg3-53r7",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-j8xg-fqg3-53r7"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "f027f4ea-87a7-4d8a-abb7-334742820258",
+      "id": "CVE-2023-44487",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-44487"
+      },
+      "description": "HTTP/2 rapid reset vulnerability",
+      "affects": [
+        {
+          "ref": "pkg:nuget/microsoft.aspnetcore.http@arm.sln",
+          "versions": [
+            {
+              "version": "arm.sln",
+              "status": "unaffected",
+              "range": "< 8.0.0"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-qr2h-7pwm-pf2w",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-qr2h-7pwm-pf2w"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "7e8bb260-3b09-4128-b0c1-7c1ba810f9ab",
+      "id": "CVE-2022-24512",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-24512"
+      },
+      "description": "Remote code execution via command injection in dotnet run",
+      "affects": [
+        {
+          "ref": "pkg:nuget/system.net.http@arm.sln",
+          "versions": [
+            {
+              "version": "arm.sln",
+              "status": "unaffected",
+              "range": "< 7.0.0"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-vh55-786g-wjwf",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-vh55-786g-wjwf"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "c9062a8c-2153-4c5e-a224-74eed984c692",
+      "id": "CVE-2022-24790",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-24790"
+      },
+      "description": "HTTP request smuggling via front-end proxy",
+      "affects": [
+        {
+          "ref": "pkg:gem/puma@Gemfile.lock",
+          "versions": [
+            {
+              "version": "Gemfile.lock",
+              "status": "unaffected",
+              "range": "< 5.6.4"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-r584-hp8p-8xx7",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-r584-hp8p-8xx7"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "db758832-f4f5-47e5-b151-32e9c3926716",
+      "id": "CVE-2022-29970",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-29970"
+      },
+      "description": "ReDoS via path-traversal pattern matching",
+      "affects": [
+        {
+          "ref": "pkg:gem/rack-protection@Gemfile.lock",
+          "versions": [
+            {
+              "version": "Gemfile.lock",
+              "status": "unaffected",
+              "range": "< 2.2.4"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-hjpg-f59j-q9vm",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-hjpg-f59j-q9vm"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "8fb64cbe-d2aa-44f3-b482-09b5de535e47",
+      "id": "CVE-2022-21698",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-21698"
+      },
+      "description": "ReDoS in HTTP label validator",
+      "affects": [
+        {
+          "ref": "pkg:golang/github.com/prometheus/client_golang@go.mod",
+          "versions": [
+            {
+              "version": "go.mod",
+              "status": "unaffected",
+              "range": "< 1.11.1"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-cg3q-j54f-5p7p",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-cg3q-j54f-5p7p"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "801c006a-eed4-468e-9bfe-96276be402a8",
+      "id": "CVE-2021-45710",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-45710"
+      },
+      "description": "Data race in time::Sleep",
+      "affects": [
+        {
+          "ref": "pkg:cargo/tokio@Cargo.lock",
+          "versions": [
+            {
+              "version": "Cargo.lock",
+              "status": "unaffected",
+              "range": "< 1.8.4"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-fg7r-2g4j-5cgr",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-fg7r-2g4j-5cgr"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "8d7ad968-0802-40aa-a8ff-3768782500f8",
+      "id": "CVE-2023-0464",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-0464"
+      },
+      "description": "Excessive resource usage in certificate verification chain",
+      "affects": [
+        {
+          "ref": "pkg:cargo/openssl@Cargo.lock",
+          "versions": [
+            {
+              "version": "Cargo.lock",
+              "status": "unaffected",
+              "range": "< 0.10.48"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-v5g6-m46w-c45f",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-v5g6-m46w-c45f"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "f19adb26-7351-41c4-8ca5-59a3bbd67694",
+      "id": "CVE-2022-40897",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-40897"
+      },
+      "description": "ReDoS via package name in requires.txt",
+      "affects": [
+        {
+          "ref": "pkg:pypi/setuptools@requirements.txt",
+          "versions": [
+            {
+              "version": "requirements.txt",
+              "status": "unaffected",
+              "range": "< 65.5.1"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-r9hh-6x7r-4rvj",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-r9hh-6x7r-4rvj"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "8009375c-0a64-4abb-ad92-7f3e240eb294",
+      "id": "CVE-2024-3651",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-3651"
+      },
+      "description": "ReDoS via crafted DNS label / IDNA name",
+      "affects": [
+        {
+          "ref": "pkg:pypi/idna@requirements.txt",
+          "versions": [
+            {
+              "version": "requirements.txt",
+              "status": "unaffected",
+              "range": "< 3.7"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-jjg7-2v4v-x38h",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-jjg7-2v4v-x38h"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "66b87c1c-05e8-48b4-953a-82049e6d2b2c",
+      "id": "CVE-2021-44906",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44906"
+      },
+      "description": "Prototype pollution via constructor property",
+      "affects": [
+        {
+          "ref": "pkg:npm/minimist@package.json",
+          "versions": [
+            {
+              "version": "package.json",
+              "status": "unaffected",
+              "range": "< 1.2.6"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.6,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-xvch-5gv4-984h",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-xvch-5gv4-984h"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "4716e250-e57f-489a-be7a-b9140116f751",
+      "id": "CVE-2020-7753",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-7753"
+      },
+      "description": "ReDoS via crafted string",
+      "affects": [
+        {
+          "ref": "pkg:npm/trim@package.json",
+          "versions": [
+            {
+              "version": "package.json",
+              "status": "unaffected",
+              "range": "< 0.0.3"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-w5p7-h5w8-2hfq",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-w5p7-h5w8-2hfq"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "d3eb556d-6ed4-468d-8537-785066cb48fb",
+      "id": "CVE-2023-45143",
+      "source": {
+        "name": "NVD",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-45143"
+      },
+      "description": "Cookie header not cleared on cross-origin redirect",
+      "affects": [
+        {
+          "ref": "pkg:npm/undici@package.json",
+          "versions": [
+            {
+              "version": "package.json",
+              "status": "unaffected",
+              "range": "< 5.26.2"
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub Dependabot. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/advisories/GHSA-wqq4-5wpv-mx2g",
+          "source": {
+            "url": "https://github.com/advisories/GHSA-wqq4-5wpv-mx2g"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "22cfab06-1a71-4913-8667-7a57645c81d3",
+      "id": "java/sql-injection",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "User-controlled data flows to SQL query without sanitisation",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "critical"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/101",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/101"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "7a0e9320-4422-4d24-84e5-ff26bbd6bd85",
+      "id": "java/path-traversal",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Unsanitised request parameter used to construct file path",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "critical"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/102",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/102"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "e4eb2c26-c213-4229-bf40-ad550b6d4a7a",
+      "id": "java/reflected-xss",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "User input reflected without HTML encoding in response",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/103",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/103"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "438e659f-d6ff-4bb9-9df9-6e06e765082c",
+      "id": "java/xxe",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "XML parser configured to allow external entities",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/104",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/104"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "3664205e-4817-4aee-99f0-24e38144f54e",
+      "id": "java/command-injection",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Shell command constructed from user-supplied string",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "critical"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/105",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/105"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "d47a95f9-237b-4a69-b829-7182ccc07188",
+      "id": "java/ldap-injection",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "User input concatenated into LDAP filter string",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/106",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/106"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "c490d052-a50c-4f46-9fab-14eb55da763a",
+      "id": "java/unsafe-deserialization",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "ObjectInputStream.readObject() called on untrusted stream",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "critical"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/107",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/107"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "17b1796f-beca-452a-905b-482bea02704b",
+      "id": "java/ssrf",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "URL fetched from request parameter without allow-list check",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/108",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/108"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "2877afc0-9e50-47fd-8292-c92e7fee2e65",
+      "id": "java/insecure-randomness",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "java.util.Random used for security-sensitive token generation",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "medium"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/109",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/109"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "f00d80d3-5768-4b8d-9419-140ca16c596c",
+      "id": "java/cleartext-logging",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Access token written to application log",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "medium"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/110",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/110"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "ded43113-0626-4a7b-937c-7d330230e17e",
+      "id": "java/open-redirect",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Redirect location derived from user-supplied URL parameter",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "medium"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/111",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/111"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "ea00b90b-35c4-4fe3-b7f3-7900e63d208b",
+      "id": "py/sql-injection",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "String-formatted SQL query with user input",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/112",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/112"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "5fb05cb1-57a3-48e5-a8b5-9fd18c0f9778",
+      "id": "py/path-traversal",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "os.path.join with untrusted prefix not normalised",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/113",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/113"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "228b9ef4-cd1d-4f51-b71b-8cff4bf0e62f",
+      "id": "java.spring.security.injection.tainted-sql-from-http-request",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Tainted data from HTTP request reaches JPA query",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/114",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/114"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "41e6cb69-54a1-4768-8dae-853701f96796",
+      "id": "java.lang.security.audit.formatted-sql-string",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "SQL built with String.format containing request parameters",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/115",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/115"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "78a9058a-7464-4f63-8696-30c1fd4cec9f",
+      "id": "javascript.lang.security.audit.prototype-pollution",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Object.assign merges untrusted JSON without prototype guard",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/116",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/116"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "7e5524b6-4459-4805-8599-b7382f0fdf9f",
+      "id": "javascript.express.security.audit.xss.mustache-template-injection",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "EJS template renders user input without escaping",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "medium"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/117",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/117"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "bdd6d02f-ea2d-4fa9-b63a-1dfa9b77c7d1",
+      "id": "python.django.security.injection.sql.django-rawsql-injection",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Raw SQL query built with f-string from request.GET",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/118",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/118"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "30d1e7c5-8c6c-4be0-809b-839c7fde877c",
+      "id": "python.flask.security.audit.hardcoded-secret",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Flask SECRET_KEY appears hardcoded in source",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "medium"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/119",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/119"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "7d01da88-27bf-47d6-8c08-3d2d1356c9c3",
+      "id": "B301",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Use of pickle.loads() on potentially untrusted data",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/120",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/120"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "e13764d5-94e0-4975-822c-ac79f8b28d10",
+      "id": "B108",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "tempfile.mktemp() used \u2014 race condition possible",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "medium"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/121",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/121"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "46ffbfe9-ab8d-4f06-989f-c961880f0289",
+      "id": "B602",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Subprocess invocation with shell=True and variable input",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/122",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/122"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "975fa289-c7cb-4abb-b372-ff483761f17b",
+      "id": "B506",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "yaml.load() called without SafeLoader \u2014 code execution possible",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "medium"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/123",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/123"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "05803cde-656e-4cb7-bf90-0aea5b20de30",
+      "id": "B201",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Flask app run with debug=True in non-test context",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "medium"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/124",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/124"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "4919321b-5d46-4ea3-ab1e-6f7a6c93a610",
+      "id": "B501",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "requests.get called with verify=False",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/125",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/125"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "817f6e41-b35a-48cd-b6e4-9ce35260ce78",
+      "id": "SNYK-JAVA-APACHECOMMONS-1316517",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Apache Commons Collections gadget chain allows RCE",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "critical"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/126",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/126"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "1f1f0862-68a8-4c3d-86f6-3a81f9485d27",
+      "id": "TRIVY-0001",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Container securityContext.privileged set to true",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/127",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/127"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "7b7dbdbf-b0f6-4c59-aca7-eccc7d76ed6f",
+      "id": "TRIVY-0002",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Dockerfile runs application process as root (no USER directive)",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub code-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "medium"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/128",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/code-scanning/128"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "4639aec8-e2e4-41d6-a949-41b758bea28f",
+      "id": "SECRET-github_personal_access_token",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: GitHub Personal Access Token",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/201",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/201"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "016f28e6-e16c-494c-bcbd-acba76314a91",
+      "id": "SECRET-aws_access_key_id",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: Amazon AWS Access Key ID",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/202",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/202"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "b418cabb-67ae-47dd-ad9f-b8e42c7708b6",
+      "id": "SECRET-aws_secret_access_key",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: Amazon AWS Secret Access Key",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/203",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/203"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "9f7c565c-6d2f-4e8a-b5e9-8455ee142769",
+      "id": "SECRET-azure_storage_account_key",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: Azure Storage Account Key",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/204",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/204"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "f780e69c-af33-48ba-83bb-954c1a378eb9",
+      "id": "SECRET-azure_service_principal",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: Azure Service Principal",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/205",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/205"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "24496c14-b439-4d2c-8d5b-351c4244ed0e",
+      "id": "SECRET-azure_devops_personal_access_token",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: Azure DevOps Personal Access Token",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/206",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/206"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "406377ef-1757-4de6-ae87-23d1de6ab171",
+      "id": "SECRET-slack_api_token",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: Slack API Token",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/207",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/207"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "3e40e7ed-c2ca-43b8-89c7-83313422524d",
+      "id": "SECRET-slack_incoming_webhook_url",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: Slack Incoming Webhook URL",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/208",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/208"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "3e8af471-a5e1-4ea5-bd3d-feb68ac68184",
+      "id": "SECRET-google_api_key",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: Google API Key",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/209",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/209"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "6a28e5d6-52d2-472d-8fa5-8c7bbf31cb74",
+      "id": "SECRET-google_oauth_client_secret",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: Google OAuth Client Secret",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/210",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/210"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "9540f3f8-8686-42c3-86a9-163286cf1abd",
+      "id": "SECRET-npm_access_token",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: npm Access Token",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/211",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/211"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "34bfc1f7-0f20-48e6-b265-19216c219a72",
+      "id": "SECRET-pypi_api_token",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: PyPI API Token",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/212",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/212"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "6aa36659-40da-4b76-a84d-14f0d5f76e0f",
+      "id": "SECRET-stripe_secret_key",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: Stripe Secret Key",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/213",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/213"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "6b6eccf6-ebe7-4092-ac83-d2d29d981b96",
+      "id": "SECRET-sendgrid_api_key",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: Twilio SendGrid API Key",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/214",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/214"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "58465b3e-6512-401d-bba6-1c579eee2552",
+      "id": "SECRET-jwt_high_risk_secret",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: JWT with Hardcoded High-Risk Secret",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/215",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/215"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "bee6e98a-5d17-4234-b1cf-7b09d52ebc92",
+      "id": "SECRET-generic_database_password",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: Generic Database Password",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/216",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/216"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "e9a8a2ac-cb4a-45d7-9958-4abd9f64466c",
+      "id": "SECRET-private_key",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: RSA Private Key",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/217",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/217"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "163d8cfd-2892-48fc-9afe-08efeb6cf4bf",
+      "id": "SECRET-terraform_cloud_api_token",
+      "source": {
+        "name": "Unknown"
+      },
+      "description": "Exposed secret detected: Terraform Cloud API Token",
+      "affects": [
+        {
+          "ref": "pkg:generic/arm-arm@",
+          "versions": [
+            {
+              "version": "",
+              "status": "unaffected",
+              "range": ""
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Alert sourced from GitHub secret-scanning. Automated exploitability analysis has not been run for this entry; manual review is required."
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub Advisory Database"
+          },
+          "severity": "high"
+        }
+      ],
+      "references": [
+        {
+          "id": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/218",
+          "source": {
+            "url": "https://github.com/solarwinds-internal/arm-arm/security/secret-scanning/218"
+          }
+        }
+      ]
+    }
+  ]
+}
