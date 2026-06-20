@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VEX Agent — Login</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #e2e8f0;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 2.5rem 2rem;
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 80px rgba(99, 102, 241, 0.08);
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .logo-section h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a5b4fc, #c4b5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-section p {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-top: 0.3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #a5b4fc;
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper .icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.7rem 0.75rem 0.7rem 2.4rem;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: #475569;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #6366f1, #7c3aed);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            margin-top: 0.5rem;
+        }
+
+        .btn-login:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-login:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-login:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .error-msg {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 0.6rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-msg.visible {
+            display: block;
+        }
+
+        .github-note {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(99, 102, 241, 0.12);
+        }
+
+        .github-note p {
+            font-size: 0.78rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .github-note a {
+            color: #818cf8;
+            text-decoration: none;
+        }
+
+        .github-note a:hover {
+            text-decoration: underline;
+        }
+
+        .spinner {
+            display: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid transparent;
+            border-top: 2px solid #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .spinner.active { display: inline-block; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Show/hide toggle for token field */
+        .toggle-vis {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 2px 4px;
+        }
+        .toggle-vis:hover { color: #a5b4fc; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo-section">
+            <div class="logo-icon">🛡️</div>
+            <h1>VEX Agent</h1>
+            <p>GitHub Security Exploitability Validator</p>
+        </div>
+
+        <div id="error-box" class="error-msg"></div>
+
+        <form id="login-form" onsubmit="doLogin(event)">
+            <div class="form-group">
+                <label for="username">GitHub Username</label>
+                <div class="input-wrapper">
+                    <span class="icon">👤</span>
+                    <input type="text" id="username" name="username"
+                           placeholder="octocat" autocomplete="username" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="token">Personal Access Token</label>
+                <div class="input-wrapper">
+                    <span class="icon">🔑</span>
+                    <input type="password" id="token" name="token"
+                           placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="current-password" required>
+                    <button type="button" class="toggle-vis" onclick="toggleTokenVis()" title="Show / hide token">👁</button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-login" id="btn-login">
+                <span class="spinner" id="spinner"></span>
+                <span id="btn-text">Sign in with GitHub</span>
+            </button>
+        </form>
+
+        <div class="github-note">
+            <p>
+                Authenticate with your GitHub account.<br>
+                A <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">Personal Access Token</a>
+                with <code style="color:#c4b5fd">read:user</code> scope is required.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function toggleTokenVis() {
+            const inp = document.getElementById('token');
+            inp.type = inp.type === 'password' ? 'text' : 'password';
+        }
+
+        async function doLogin(e) {
+            e.preventDefault();
+            const errBox = document.getElementById('error-box');
+            const btn    = document.getElementById('btn-login');
+            const spinner = document.getElementById('spinner');
+            const btnText = document.getElementById('btn-text');
+
+            errBox.classList.remove('visible');
+            btn.disabled = true;
+            spinner.classList.add('active');
+            btnText.textContent = 'Authenticating…';
+
+            const username = document.getElementById('username').value.trim();
+            const token    = document.getElementById('token').value.trim();
+
+            try {
+                const resp = await fetch('/api/v1/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, token }),
+                });
+                const data = await resp.json();
+
+                if (!resp.ok) {
+                    throw new Error(data.error || data.detail || 'Authentication failed');
+                }
+
+                // Login succeeded — redirect to dashboard
+                window.location.href = '/dashboard';
+
+            } catch (err) {
+                errBox.textContent = err.message;
+                errBox.classList.add('visible');
+            } finally {
+                btn.disabled = false;
+                spinner.classList.remove('active');
+                btnText.textContent = 'Sign in with GitHub';
+            }
+        }
+
+        // If already logged in, skip straight to dashboard
+        fetch('/api/v1/me').then(r => {
+            if (r.ok) window.location.href = '/dashboard';
+        }).catch(() => {});
+    </script>
+</body>
+</html>

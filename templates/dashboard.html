@@ -1,1 +1,2515 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VEX Agent — Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --accent: #0ea5e9;
+        }
+
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+
+        /* Decision colours */
+        .d-not_affected_dev_only {
+            background: #166534;
+            color: #bbf7d0;
+        }
+
+        .d-not_affected_dead_code {
+            background: #14532d;
+            color: #a7f3d0;
+        }
+
+        .d-affected_reachable {
+            background: #7c2d12;
+            color: #fecdd3;
+        }
+
+        .d-break_the_build {
+            background: #450a0a;
+            color: #fca5a5;
+        }
+
+        .d-under_investigation {
+            background: #1e3a5f;
+            color: #bae6fd;
+        }
+
+        .d-pending_review {
+            background: #3b1f6e;
+            color: #d8b4fe;
+        }
+
+        /* Severity */
+        .s-critical {
+            background: #450a0a;
+            color: #fca5a5;
+        }
+
+        .s-high {
+            background: #7c2d12;
+            color: #fed7aa;
+        }
+
+        .s-medium {
+            background: #713f12;
+            color: #fef08a;
+        }
+
+        .s-low {
+            background: #14532d;
+            color: #bbf7d0;
+        }
+
+        .s-informational {
+            background: #1e293b;
+            color: #94a3b8;
+        }
+
+        /* Pulse dot */
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .4
+            }
+        }
+
+        .live-dot {
+            animation: pulse 2s cubic-bezier(.4, 0, .6, 1) infinite;
+        }
+
+        /* Table rows */
+        tr:hover td {
+            background: #263349 !important;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+
+        /* Fade-in for refreshed rows */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-4px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn .3s ease;
+        }
+
+        /* Spinner */
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .spin {
+            animation: spin 1s linear infinite
+        }
+    </style>
+</head>
+
+<body class="min-h-screen p-4 md:p-6">
+
+    <!-- ── Header ─────────────────────────────────────────── -->
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center text-xl"
+                style="background:linear-gradient(135deg,#0ea5e9,#6366f1)">🔒</div>
+            <div>
+                <h1 class="text-xl font-bold text-white leading-tight">VEX Agent Dashboard</h1>
+                <p class="text-xs text-slate-400">GitHub Security Exploitability Validator</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-4 text-sm text-slate-400">
+            <span id="last-updated" class="text-xs"></span>
+            <span class="flex items-center gap-1.5">
+                <span id="status-dot" class="w-2 h-2 rounded-full bg-slate-500 live-dot"></span>
+                <span id="status-text">Connecting…</span>
+            </span>
+            <button onclick="refresh()" id="refresh-btn"
+                class="px-3 py-1.5 rounded-md text-xs font-medium border border-slate-600 hover:border-sky-500 hover:text-sky-400 transition-colors">
+                ↺ Refresh
+            </button>
+            <button onclick="openSettings()" title="Settings"
+                class="w-8 h-8 rounded-md flex items-center justify-center border border-slate-600 hover:border-sky-500 hover:text-sky-400 transition-colors text-base"
+                style="line-height:1">⚙️</button>
+            <!-- User avatar + logout -->
+            <div id="user-badge" class="flex items-center gap-2 ml-2" style="display:none">
+                <img id="user-avatar" src="" alt="" class="w-7 h-7 rounded-full border border-indigo-500/40"
+                    style="display:none">
+                <span id="user-name" class="text-xs text-slate-300 font-medium"></span>
+                <button onclick="doLogout()" title="Sign out"
+                    class="px-2 py-1 rounded-md text-xs font-medium border border-slate-600 hover:border-red-500 hover:text-red-400 transition-colors">
+                    ⏻ Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Export & Import Panel (collapsible with tabs) ──────────── -->
+    <div class="card mb-6 overflow-hidden">
+        <button onclick="toggleExportImport()"
+            class="w-full flex items-center justify-between p-4 hover:bg-slate-700/30 transition-colors"
+            style="border-bottom:1px solid #334155">
+            <span class="text-sm font-semibold text-slate-300 flex items-center gap-2">
+                📦 Export &amp; Import
+            </span>
+            <span id="ei-chevron" class="text-slate-500 transition-transform duration-200"
+                style="font-size:1.1rem">▾</span>
+        </button>
+
+        <div id="ei-panel" style="display:none">
+            <!-- Tab bar -->
+            <div class="flex border-b border-slate-700 px-4 pt-2 gap-1 text-xs font-medium">
+                <button onclick="switchEiTab('cache')" id="ei-tab-cache"
+                    class="ei-tab px-4 py-2 rounded-t-md transition-colors"
+                    style="background:#1e3a5f;color:#7dd3fc;border:1px solid #334155;border-bottom:none">
+                    🗄 Prepare Source Cache
+                </button>
+                <button onclick="switchEiTab('alerts')" id="ei-tab-alerts"
+                    class="ei-tab px-4 py-2 rounded-t-md transition-colors"
+                    style="background:transparent;color:#94a3b8;border:1px solid transparent;border-bottom:none">
+                    📊 Export &amp; Analyse
+                </button>
+                <button onclick="switchEiTab('import')" id="ei-tab-import"
+                    class="ei-tab px-4 py-2 rounded-t-md transition-colors"
+                    style="background:transparent;color:#94a3b8;border:1px solid transparent;border-bottom:none">
+                    📥 Import &amp; Analyse
+                </button>
+                <button onclick="switchEiTab('sbom')" id="ei-tab-sbom"
+                    class="ei-tab px-4 py-2 rounded-t-md transition-colors"
+                    style="background:transparent;color:#94a3b8;border:1px solid transparent;border-bottom:none">
+                    📦 Export SBOM &amp; VEX
+                </button>
+            </div>
+
+            <!-- ── Tab: Prepare Source Cache (one-time) ──────── -->
+            <div id="ei-content-cache" class="ei-content p-5">
+                <div class="rounded-lg p-4" style="background:#0f2b1a;border:1px solid #166534">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xl">🗄</span>
+                        <span class="text-sm font-semibold text-green-300">Prepare Source Cache (One-Time Task)</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-3">
+                        Clone the target repository and build the source-file cache <strong>once</strong>.
+                        Export &amp; Analyse and Import &amp; Analyse will use this pre-built cache instead of
+                        cloning and scanning every time — significantly faster for repeated runs.
+                    </p>
+
+                    <!-- Status display -->
+                    <div id="sc-status-card" class="rounded-md p-3 mb-3"
+                        style="background:#0a1f14;border:1px solid #1a3d28">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-medium text-slate-400">Cache Status:</span>
+                            <span id="sc-status-badge" class="text-xs font-semibold px-2 py-0.5 rounded-full"
+                                style="background:#991b1b;color:#fca5a5">Not Ready</span>
+                        </div>
+                        <div id="sc-status-details" class="mt-2 text-[11px] text-slate-500 space-y-0.5"
+                            style="display:none">
+                            <div>Repo: <span id="sc-detail-repo" class="text-slate-400">—</span></div>
+                            <div>Branch: <span id="sc-detail-branch" class="text-slate-400">—</span></div>
+                            <div>HEAD: <span id="sc-detail-sha" class="text-slate-400 font-mono">—</span></div>
+                            <div>Files cached: <span id="sc-detail-files" class="text-green-400 font-semibold">—</span>
+                            </div>
+                            <div>Prepared at: <span id="sc-detail-time" class="text-slate-400">—</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Action buttons -->
+                    <div class="flex items-center gap-3">
+                        <button id="sc-prepare-btn" onclick="prepareSourceCache(false)"
+                            class="flex-1 py-2.5 rounded-md text-sm font-semibold text-white transition-colors"
+                            style="background:#15803d" onmouseover="this.style.background='#16a34a'"
+                            onmouseout="this.style.background='#15803d'">
+                            ▶ Prepare Source Cache
+                        </button>
+                        <button id="sc-force-btn" onclick="prepareSourceCache(true)"
+                            class="py-2.5 px-4 rounded-md text-xs font-semibold text-amber-300 transition-colors"
+                            style="background:#78350f;border:1px solid #92400e"
+                            onmouseover="this.style.background='#92400e'" onmouseout="this.style.background='#78350f'">
+                            ↻ Force Rebuild
+                        </button>
+                        <button id="sc-invalidate-btn" onclick="invalidateSourceCache()"
+                            class="py-2.5 px-4 rounded-md text-xs font-semibold text-red-300 transition-colors"
+                            style="background:#7f1d1d;border:1px solid #991b1b"
+                            onmouseover="this.style.background='#991b1b'" onmouseout="this.style.background='#7f1d1d'">
+                            ✕ Invalidate
+                        </button>
+                    </div>
+                    <div id="sc-action-status" class="mt-3 text-xs text-slate-500 min-h-[1rem]"></div>
+                </div>
+            </div>
+
+            <!-- ── Tab: Export & Analyse ─────────────────────── -->
+            <div id="ei-content-alerts" class="ei-content p-5" style="display:none">
+                <div class="rounded-lg p-4" style="background:#1a1a2e;border:1px solid #4338ca">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xl">📊</span>
+                        <span class="text-sm font-semibold text-indigo-300">Export, Analyse &amp; Report</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-3">
+                        Fetch all GitHub security alerts (Dependabot, Code Scanning, Secret Scanning),
+                        export them in your chosen format, then automatically run the full VEX analysis
+                        pipeline (EPSS + Metadata + Reachability) on every alert. Once analysis completes,
+                        the analysed results are exported as a separate file.
+                    </p>
+
+                    <!-- Format selector -->
+                    <div class="flex items-center gap-4 mb-4">
+                        <span class="text-xs text-slate-400 font-medium">Export format:</span>
+                        <label class="flex items-center gap-1.5 cursor-pointer">
+                            <input type="radio" name="ea-format" value="excel" checked class="accent-indigo-500">
+                            <span class="text-xs text-amber-300">📗 Excel (.xlsx)</span>
+                        </label>
+                        <label class="flex items-center gap-1.5 cursor-pointer">
+                            <input type="radio" name="ea-format" value="pdf" class="accent-indigo-500">
+                            <span class="text-xs text-teal-300">📕 PDF (.pdf)</span>
+                        </label>
+                    </div>
+
+                    <!-- Action button -->
+                    <button id="ea-run-btn" onclick="exportAndAnalyse(this)"
+                        class="w-full py-2.5 rounded-md text-sm font-semibold text-white transition-colors"
+                        style="background:#4338ca" onmouseover="this.style.background='#4f46e5'"
+                        onmouseout="this.style.background='#4338ca'">
+                        ▶ Export &amp; Analyse
+                    </button>
+                    <div id="ea-status" class="mt-3 text-xs text-slate-500 min-h-[1rem]"></div>
+
+                    <!-- Progress bar (hidden until running) -->
+                    <div id="ea-progress-wrap" class="mt-3 hidden">
+                        <div class="flex items-center justify-between mb-1">
+                            <span id="ea-progress-phase"
+                                class="text-xs text-indigo-300 font-medium truncate max-w-[70%]">Initialising…</span>
+                            <span id="ea-progress-pct" class="text-xs text-slate-400 tabular-nums">0%</span>
+                        </div>
+                        <div class="w-full h-2.5 rounded-full overflow-hidden" style="background:#312e81">
+                            <div id="ea-progress-bar" class="h-full rounded-full transition-all duration-300 ease-out"
+                                style="width:0%;background:linear-gradient(90deg,#6366f1,#818cf8)"></div>
+                        </div>
+                        <div class="flex items-center justify-between mt-1.5 text-[11px] text-slate-500">
+                            <span id="ea-progress-detail">—</span>
+                            <span id="ea-progress-alert" class="truncate max-w-[50%] text-right">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Tab: Import & Analyse ──────────────────────── -->
+            <div id="ei-content-import" class="ei-content p-5" style="display:none">
+                <div class="rounded-lg p-4" style="background:#1e1a2e;border:1px solid #4338ca">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xl">📊</span>
+                        <span class="text-sm font-semibold text-indigo-300">Upload Alert Spreadsheet</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-3">
+                        Upload an Excel file (.xlsx) with GitHub alert details. The agent will parse each row,
+                        run EPSS scoring, metadata &amp; reachability analysis, create Jira tickets for affected
+                        findings, and update the dashboard.
+                        <br><span class="text-indigo-400 mt-1 inline-block">Required columns: Alert ID, Severity.
+                            Optional: Alert Type, Repository, Package, CVE / ID, EPSS Score</span>
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <label class="flex-1 cursor-pointer">
+                            <input type="file" id="import-file-input" accept=".xlsx,.xls" class="hidden"
+                                onchange="onImportFileSelected(this)">
+                            <div id="import-file-label"
+                                class="w-full py-2 rounded-md text-xs font-semibold text-center text-indigo-300 transition-colors"
+                                style="background:#312e81;border:1px dashed #6366f1"
+                                onmouseover="this.style.borderColor='#818cf8'"
+                                onmouseout="this.style.borderColor='#6366f1'">
+                                📁 Click to select Excel file…
+                            </div>
+                        </label>
+                        <button id="import-upload-btn" onclick="importAlertsExcel()" disabled
+                            class="py-2 px-5 rounded-md text-xs font-semibold text-white transition-colors"
+                            style="background:#4338ca;opacity:0.5;cursor:not-allowed"
+                            onmouseover="if(!this.disabled)this.style.background='#4f46e5'"
+                            onmouseout="this.style.background='#4338ca'">
+                            ▶ Upload &amp; Analyse
+                        </button>
+                    </div>
+                    <div id="import-status" class="mt-3 text-xs text-slate-500 min-h-[1rem]"></div>
+                    <!-- ── Progress bar (hidden until import starts) ── -->
+                    <div id="import-progress-wrap" class="mt-3 hidden">
+                        <div class="flex items-center justify-between mb-1">
+                            <span id="import-progress-phase"
+                                class="text-xs text-indigo-300 font-medium truncate max-w-[60%]">Initialising…</span>
+                            <span id="import-progress-pct" class="text-xs text-slate-400 tabular-nums">0%</span>
+                        </div>
+                        <div class="w-full h-2.5 rounded-full overflow-hidden" style="background:#312e81">
+                            <div id="import-progress-bar"
+                                class="h-full rounded-full transition-all duration-300 ease-out"
+                                style="width:0%;background:linear-gradient(90deg,#6366f1,#818cf8)"></div>
+                        </div>
+                        <div class="flex items-center justify-between mt-1.5 text-[11px] text-slate-500">
+                            <span id="import-progress-detail">—</span>
+                            <span id="import-progress-alert" class="truncate max-w-[50%] text-right">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Tab: SBOM & VEX ────────────────────────────── -->
+            <div id="ei-content-sbom" class="ei-content p-5" style="display:none">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- SBOM Download -->
+                    <div class="rounded-lg p-4" style="background:#0f2942;border:1px solid #1e4976">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xl">🗂</span>
+                            <span class="text-sm font-semibold text-sky-300">SBOM</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-3">CycloneDX 1.5 Software Bill of Materials scanned from the
+                            configured repository.</p>
+                        <button onclick="exportSbom(this)"
+                            class="w-full py-2 rounded-md text-xs font-semibold text-white transition-colors"
+                            style="background:#0369a1" onmouseover="this.style.background='#0284c7'"
+                            onmouseout="this.style.background='#0369a1'">
+                            ⬇ Download SBOM
+                        </button>
+                        <div id="sbom-status" class="mt-2 text-xs text-slate-500 min-h-[1rem]"></div>
+                    </div>
+
+                    <!-- VEX Report Download -->
+                    <div class="rounded-lg p-4" style="background:#1a0f2e;border:1px solid #4c1d95">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xl">🛡</span>
+                            <span class="text-sm font-semibold text-purple-300">VEX Report</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-3">Combined CycloneDX VEX document from all open GitHub
+                            security
+                            alerts (Dependabot + code scan + secrets).</p>
+                        <button onclick="exportVex(this)"
+                            class="w-full py-2 rounded-md text-xs font-semibold text-white transition-colors"
+                            style="background:#6d28d9" onmouseover="this.style.background='#7c3aed'"
+                            onmouseout="this.style.background='#6d28d9'">
+                            ⬇ Download VEX Report
+                        </button>
+                        <div id="vex-status" class="mt-2 text-xs text-slate-500 min-h-[1rem]"></div>
+                    </div>
+
+                    <!-- Full Report → SharePoint -->
+                    <div class="rounded-lg p-4" style="background:#1a2e0f;border:1px solid #365314">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xl">🚀</span>
+                            <span class="text-sm font-semibold text-green-300">Full Report → SharePoint</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-3">Generate SBOM + VEX, upload both to <code
+                                class="text-green-400">SHAREPOINT_FOLDER_PATH</code> and refresh dashboard stats.</p>
+                        <button onclick="runFullReport(this)"
+                            class="w-full py-2 rounded-md text-xs font-semibold text-white transition-colors"
+                            style="background:#15803d" onmouseover="this.style.background='#16a34a'"
+                            onmouseout="this.style.background='#15803d'">
+                            ▶ Run &amp; Upload to SharePoint
+                        </button>
+                        <div id="report-run-status" class="mt-2 text-xs text-slate-500 min-h-[1rem]"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Stat Cards ──────────────────────────────────────── -->
+    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mb-6" id="stat-cards">
+        <!-- Populated by JS -->
+    </div>
+
+    <!-- ── Charts Row ──────────────────────────────────────── -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
+
+        <!-- Decision Donut -->
+        <div class="card p-4 flex flex-col">
+            <h2 class="text-sm font-semibold text-slate-300 mb-3">Decision Breakdown</h2>
+            <div class="flex-1 flex items-center justify-center" style="min-height:190px">
+                <canvas id="decisionChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Severity Bar -->
+        <div class="card p-4 flex flex-col">
+            <h2 class="text-sm font-semibold text-slate-300 mb-3">Severity Distribution</h2>
+            <div class="flex-1 flex items-center justify-center" style="min-height:190px">
+                <canvas id="severityChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Last Report Card -->
+        <div class="card p-4 flex flex-col gap-3" id="report-card">
+            <h2 class="text-sm font-semibold text-slate-300">Last Security Report</h2>
+            <div id="report-body" class="text-slate-400 text-sm flex-1 flex items-center justify-center">
+                <span class="text-slate-600 italic">No reports run yet</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ── Two-column lower section ───────────────────────── -->
+    <div class="grid grid-cols-1 xl:grid-cols-5 gap-4">
+
+        <!-- Recent Pipeline Runs -->
+        <div class="card p-4 xl:col-span-2 flex flex-col" style="max-height:480px">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-sm font-semibold text-slate-300">Recent Pipeline Runs</h2>
+                <span id="pipeline-count" class="badge" style="background:#1e3a5f;color:#7dd3fc"></span>
+            </div>
+            <div class="overflow-auto flex-1">
+                <table class="w-full text-xs border-collapse">
+                    <thead>
+                        <tr class="text-slate-400 border-b border-slate-700">
+                            <th class="py-2 pr-3 text-left font-medium">Time</th>
+                            <th class="py-2 pr-3 text-left font-medium">Type</th>
+                            <th class="py-2 pr-3 text-left font-medium">Package / CVE</th>
+                            <th class="py-2 pr-3 text-left font-medium">Sev</th>
+                            <th class="py-2 pr-3 text-left font-medium">Decision</th>
+                            <th class="py-2 text-left font-medium">Jira</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pipeline-table">
+                        <tr>
+                            <td colspan="6" class="py-6 text-center text-slate-600 italic">No runs recorded yet</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Unaffected/UnReachable (wider) -->
+        <div class="card p-4 xl:col-span-3 flex flex-col" style="max-height:480px">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-sm font-semibold text-slate-300">Unaffected/UnReachable</h2>
+                <span id="review-count" class="badge" style="background:#1e3a5f;color:#7dd3fc"></span>
+            </div>
+            <div class="overflow-auto flex-1">
+                <table class="w-full text-xs border-collapse">
+                    <thead id="reviews-thead">
+                        <tr class="text-slate-400 border-b border-slate-700">
+                            <th class="py-2 pr-3 text-left font-medium">Package</th>
+                            <th class="py-2 pr-3 text-left font-medium">Decision</th>
+                            <th class="py-2 pr-3 text-left font-medium">Justification</th>
+                            <th class="py-2 text-left font-medium review-actions-col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reviews-table">
+                        <tr>
+                            <td colspan="4" class="py-6 text-center text-slate-600 italic">No unaffected/unreachable
+                                items</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ── Footer ─────────────────────────────────────────── -->
+    <div class="mt-5 text-center text-xs text-slate-600">
+        VEX Agent &nbsp;·&nbsp; Auto-refreshes every 30 s &nbsp;·&nbsp;
+        <a href="/docs" class="hover:text-sky-400 transition-colors">API Docs</a> &nbsp;·&nbsp;
+        <a href="/health" class="hover:text-sky-400 transition-colors">Health</a>
+    </div>
+
+    <!-- ── Review Action Modal ─────────────────────────────────────── -->
+    <div id="review-modal-overlay" onclick="if(event.target===this)closeReviewModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:70;backdrop-filter:blur(3px);
+               justify-content:center;align-items:center">
+        <div id="review-modal-card" style="background:#1e293b;border-radius:12px;padding:0;
+                    box-shadow:0 8px 32px rgba(0,0,0,.4);max-width:480px;width:90%;
+                    border:1px solid #334155;transform:scale(.9);opacity:0;
+                    transition:transform .2s ease,opacity .2s ease;overflow:hidden">
+            <!-- Header bar -->
+            <div id="review-modal-header" style="padding:1rem 1.5rem;border-bottom:1px solid #334155">
+                <div class="text-xs font-semibold text-sky-400" style="letter-spacing:.05em">VEX AGENT — HUMAN REVIEW
+                    RESOLVED</div>
+                <div id="review-modal-outcome" class="text-lg font-bold mt-1"></div>
+            </div>
+            <!-- Facts -->
+            <div id="review-modal-facts" style="padding:1rem 1.5rem" class="text-sm space-y-2"></div>
+            <!-- Footer -->
+            <div style="padding:.75rem 1.5rem;background:#0f172a;border-top:1px solid #334155"
+                class="flex items-center justify-between">
+                <span id="review-modal-timer" class="text-xs text-slate-600"></span>
+                <button onclick="closeReviewModal()" class="px-4 py-1.5 rounded-md text-sm font-semibold bg-sky-600 text-white
+                           hover:bg-sky-500 transition-colors focus:outline-none">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Drilldown Modal ────────────────────────────────────────── -->
+    <div id="drilldown-overlay" onclick="if(event.target===this)closeDrilldown()"
+        style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;backdrop-filter:blur(3px)">
+
+        <div id="drilldown-panel" style="position:fixed;top:0;right:0;bottom:0;width:min(1600px,100%);background:#0f172a;
+                    border-left:1px solid #334155;display:flex;flex-direction:column;
+                    transform:translateX(100%);transition:transform .25s ease">
+
+            <!-- Panel header -->
+            <div class="flex items-center justify-between px-5 py-4"
+                style="background:#1e293b;border-bottom:1px solid #334155">
+                <div>
+                    <h2 id="drilldown-title" class="text-base font-bold text-white"></h2>
+                    <p id="drilldown-subtitle" class="text-xs text-slate-400 mt-0.5"></p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <!-- Search -->
+                    <input id="drilldown-search" type="text" placeholder="Search package / CVE / repo…"
+                        oninput="renderDrilldownTable()" class="px-3 py-1.5 rounded-md text-xs bg-slate-800 border border-slate-600
+                                  text-slate-200 placeholder-slate-500 focus:outline-none
+                                  focus:border-sky-500 w-52" />
+                    <!-- Severity filter -->
+                    <select id="drilldown-sev" onchange="renderDrilldownTable()" class="px-2 py-1.5 rounded-md text-xs bg-slate-800 border border-slate-600
+                                   text-slate-300 focus:outline-none focus:border-sky-500">
+                        <option value="">All severities</option>
+                        <option value="critical">Critical</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                    <!-- Type filter -->
+                    <select id="drilldown-type" onchange="renderDrilldownTable()" class="px-2 py-1.5 rounded-md text-xs bg-slate-800 border border-slate-600
+                                   text-slate-300 focus:outline-none focus:border-sky-500">
+                        <option value="">All types</option>
+                        <option value="dependabot">Dependabot</option>
+                        <option value="code_scanning">Code Scanning</option>
+                        <option value="secret_scanning">Secret Scanning</option>
+                    </select>
+                    <button onclick="closeDrilldown()" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400
+                                   hover:text-white hover:bg-slate-700 transition-colors text-lg">&times;</button>
+                </div>
+            </div>
+
+            <!-- Summary chips -->
+            <div id="drilldown-chips" class="flex flex-wrap gap-2 px-5 py-3"
+                style="background:#1a2535;border-bottom:1px solid #334155"></div>
+
+            <!-- Table -->
+            <div class="flex-1 overflow-auto px-5 py-3">
+                <table class="w-full text-xs border-collapse" id="drilldown-table">
+                    <thead>
+                        <tr class="text-slate-400" style="border-bottom:1px solid #334155">
+                            <th class="py-2 pr-3 text-left font-medium cursor-pointer hover:text-sky-400"
+                                onclick="sortDrilldown('timestamp')">Time ↕</th>
+                            <th class="py-2 pr-3 text-left font-medium">Type</th>
+                            <th class="py-2 pr-3 text-left font-medium cursor-pointer hover:text-sky-400"
+                                onclick="sortDrilldown('package_name')">Package / CVE ↕</th>
+                            <th class="py-2 pr-3 text-left font-medium cursor-pointer hover:text-sky-400"
+                                onclick="sortDrilldown('severity')">Severity ↕</th>
+                            <th class="py-2 pr-3 text-left font-medium">Decision</th>
+                            <th class="py-2 pr-3 text-left font-medium cursor-pointer hover:text-sky-400"
+                                onclick="sortDrilldown('epss_score')">EPSS ↕</th>
+                            <th class="py-2 pr-3 text-left font-medium">Reachable</th>
+                            <th class="py-2 pr-3 text-left font-medium">Repo</th>
+                            <th class="py-2 pr-3 text-left font-medium">Jira</th>
+                            <th class="py-2 pr-3 text-left font-medium">Justification</th>
+                            <th class="py-2 pr-3 text-left font-medium">Suggestive Fix</th>
+                            <th class="py-2 text-left font-medium">License Risk</th>
+                        </tr>
+                    </thead>
+                    <tbody id="drilldown-tbody">
+                        <tr>
+                            <td colspan="12" class="py-8 text-center text-slate-600 italic">Loading…</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Panel footer -->
+            <div id="drilldown-footer" class="px-5 py-2.5 text-xs text-slate-500"
+                style="background:#1e293b;border-top:1px solid #334155"></div>
+        </div>
+    </div>
+
+
+    <!-- ── Settings Panel ────────────────────────────────────────── -->
+    <div id="settings-overlay" onclick="if(event.target===this)closeSettings()"
+        style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:60;backdrop-filter:blur(3px)">
+
+        <div id="settings-panel" style="position:fixed;top:0;right:0;bottom:0;width:min(700px,100%);background:#0f172a;
+                   border-left:1px solid #334155;display:flex;flex-direction:column;
+                   transform:translateX(100%);transition:transform .25s ease">
+
+            <!-- Panel header -->
+            <div class="flex items-center justify-between px-5 py-4"
+                style="background:#1e293b;border-bottom:1px solid #334155">
+                <div>
+                    <h2 class="text-base font-bold text-white">⚙️ Settings</h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Environment configuration — changes are persisted to .env
+                        and applied immediately</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="settings-save-btn" onclick="saveSettings()"
+                        class="px-4 py-1.5 rounded-md text-xs font-semibold text-white transition-colors"
+                        style="background:#0369a1" onmouseover="this.style.background='#0284c7'"
+                        onmouseout="this.style.background='#0369a1'">💾 Save &amp; Apply</button>
+                    <button onclick="closeSettings()" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400
+                               hover:text-white hover:bg-slate-700 transition-colors text-lg">&times;</button>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="px-4 py-2" style="background:#162032;border-bottom:1px solid #334155">
+                <div id="settings-tabs" class="flex flex-wrap gap-1"></div>
+            </div>
+
+            <!-- Status bar -->
+            <div id="settings-status" class="px-5 py-1.5 text-xs text-slate-400"
+                style="background:#0d1b2a;border-bottom:1px solid #1e293b;min-height:26px"></div>
+
+            <!-- Content area -->
+            <div id="settings-content" class="flex-1 overflow-auto px-5 py-5 space-y-4"></div>
+        </div>
+    </div>
+
+    <script>
+        // ── Helpers ──────────────────────────────────────────────────────
+        const $ = id => document.getElementById(id);
+        const fmt_ts = iso => {
+            if (!iso) return '—';
+            const d = new Date(iso);
+            return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        };
+        const fmt_dt = iso => {
+            if (!iso) return '—';
+            const d = new Date(iso);
+            return d.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        };
+
+        // ════════════════════════════════════════════════════════════════
+        // Export & Import panel – toggle + tabs
+        // ════════════════════════════════════════════════════════════════
+        let _eiOpen = false;
+        function toggleExportImport() {
+            _eiOpen = !_eiOpen;
+            $('ei-panel').style.display = _eiOpen ? '' : 'none';
+            $('ei-chevron').style.transform = _eiOpen ? 'rotate(180deg)' : '';
+        }
+        function switchEiTab(tab) {
+            document.querySelectorAll('.ei-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.ei-tab').forEach(el => {
+                el.style.background = 'transparent';
+                el.style.color = '#94a3b8';
+                el.style.border = '1px solid transparent';
+                el.style.borderBottom = 'none';
+            });
+            $('ei-content-' + tab).style.display = '';
+            const btn = $('ei-tab-' + tab);
+            btn.style.background = '#1e3a5f';
+            btn.style.color = '#7dd3fc';
+            btn.style.border = '1px solid #334155';
+            btn.style.borderBottom = 'none';
+        }
+
+        // ════════════════════════════════════════════════════════════════
+        // Settings panel
+        // ════════════════════════════════════════════════════════════════
+        const _SETTINGS_MASK = '••••••••';
+
+        const SETTINGS_GROUPS = [
+            {
+                id: 'github', label: 'GitHub', icon: '🐙',
+                fields: [
+                    { key: 'github_webhook_secret', label: 'Webhook Secret', type: 'password', placeholder: 'your-webhook-secret', desc: 'HMAC-SHA256 secret set in repo Settings → Webhooks' },
+                    { key: 'target_repo_url', label: 'Target Repo URL', type: 'text', placeholder: 'https://github.com/org/repo.git', desc: 'Clone URL to analyse (used when Local Repo Path is blank)' },
+                    { key: 'target_repo_branch', label: 'Branch', type: 'text', placeholder: 'main', desc: 'Branch to check out when cloning' },
+                    { key: 'local_repo_path', label: 'Local Repo Path', type: 'text', placeholder: 'C:/repos/my-repo', desc: 'Absolute path to an already-cloned local repo (skips fresh clone)' },
+                    { key: 'shallow_clone_depth', label: 'Clone Depth', type: 'number', placeholder: '1', desc: 'Git shallow-clone depth (1 = fastest)' },
+                ]
+            },
+            {
+                id: 'jira', label: 'Jira', icon: '🎯',
+                fields: [
+                    { key: 'jira_base_url', label: 'Base URL', type: 'text', placeholder: 'https://yourorg.atlassian.net', desc: 'Atlassian cloud base URL' },
+                    { key: 'jira_email', label: 'Email', type: 'text', placeholder: 'you@company.com', desc: 'Email address for Jira API authentication' },
+                    { key: 'jira_api_token', label: 'API Token', type: 'password', placeholder: 'ATATT3x…', desc: 'Atlassian API token — never commit this value' },
+                    { key: 'jira_project_key', label: 'Project Key', type: 'text', placeholder: 'SEC', desc: 'Key of Jira project where tickets are created' },
+                    { key: 'jira_default_assignee', label: 'Default Assignee', type: 'text', placeholder: '63d8cca4c2b1…', desc: 'Jira account ID for the default ticket assignee (leave blank for unassigned)' },
+                ]
+            },
+            {
+                id: 'teams', label: 'Teams', icon: '💬',
+                fields: [
+                    { key: 'teams_webhook_url', label: 'Incoming Webhook URL', type: 'password', placeholder: 'https://yourorg.webhook.office.com/…', desc: 'Teams channel Incoming Webhook URL — leave blank to disable notifications' },
+                ]
+            },
+            {
+                id: 'llm', label: 'LLM / Copilot', icon: '🤖',
+                fields: [
+                    { key: 'copilot_token', label: 'Copilot / Models Token', type: 'password', placeholder: 'github_pat_… or ghp_…', desc: 'GitHub token with models:read scope (used in preference to OpenAI key)' },
+                    { key: 'copilot_model', label: 'Copilot Model', type: 'text', placeholder: 'gpt-4o', desc: 'Model to request: gpt-4o, gpt-4o-mini, Meta-Llama-3.1-405B-Instruct, …' },
+                    { key: 'copilot_api_base', label: 'API Base URL', type: 'text', placeholder: 'Leave blank for auto-detect', desc: 'Override API base URL (auto-selected by token type when blank)' },
+                    { key: 'openai_api_key', label: 'OpenAI API Key', type: 'password', placeholder: 'sk-…', desc: 'Fallback when copilot_token is not set' },
+                    { key: 'openai_model', label: 'OpenAI Model', type: 'text', placeholder: 'gpt-4o', desc: 'OpenAI model for fallback LLM analysis' },
+                ]
+            },
+            {
+                id: 'agent', label: 'Agent', icon: '⚙️',
+                fields: [
+                    { key: 'epss_threshold', label: 'EPSS Threshold', type: 'float', placeholder: '0.1', desc: 'EPSS score above which a reachable CVE triggers break-the-build (0–1)' },
+                    { key: 'skip_dev_dependencies', label: 'Skip Dev Dependencies', type: 'bool', desc: 'Auto-mark devDependency findings as NOT_AFFECTED' },
+                    { key: 'enable_llm_fallback', label: 'Enable LLM Fallback', type: 'bool', desc: 'Run LLM reachability analysis when AST finds no code hits' },
+                    { key: 'enable_break_the_build', label: 'Enable Break the Build', type: 'bool', desc: 'Fail GitHub Check Run when EPSS > threshold and code is reachable' },
+                ]
+            },
+            {
+                id: 'review', label: 'Human Review', icon: '👥',
+                fields: [
+                    { key: 'enable_human_review', label: 'Enable Human Review Queue', type: 'bool', desc: 'Pause qualifying findings for human approval before Jira tickets are created' },
+                    { key: 'review_confidence_threshold', label: 'Confidence Threshold', type: 'float', placeholder: '0.75', desc: 'LLM confidence below this triggers a review (0–1)' },
+                    { key: 'review_on_critical', label: 'Always Review Critical', type: 'bool', desc: 'Force human review for all critical-severity findings' },
+                    { key: 'review_timeout_hours', label: 'Timeout (hours)', type: 'number', placeholder: '24', desc: 'Auto-mark as timed_out if no action within this period' },
+                    { key: 'review_base_url', label: 'Review Base URL', type: 'text', placeholder: 'http://localhost:49152', desc: 'Public base URL for Approve/Dismiss action links in Teams cards' },
+                ]
+            },
+            {
+                id: 'sharepoint', label: 'SharePoint', icon: '☁️',
+                fields: [
+                    { key: 'sharepoint_tenant_id', label: 'Tenant ID', type: 'text', placeholder: 'xxxxxxxx-…', desc: 'Azure AD tenant GUID' },
+                    { key: 'sharepoint_client_id', label: 'Client ID', type: 'text', placeholder: 'xxxxxxxx-…', desc: 'App registration client GUID (Sites.ReadWrite.All permission required)' },
+                    { key: 'sharepoint_client_secret', label: 'Client Secret', type: 'password', placeholder: 'your-client-secret', desc: 'App registration client secret value' },
+                    { key: 'sharepoint_site_url', label: 'Site URL', type: 'text', placeholder: 'https://myorg.sharepoint.com/sites/MySite', desc: 'Full URL to the destination SharePoint site' },
+                    { key: 'sharepoint_folder_path', label: 'Folder Path', type: 'text', placeholder: 'Shared Documents/VEX-Store', desc: 'Root folder path inside the document library (sub-folders created automatically)' },
+                ]
+            },
+        ];
+
+        let _settingsActive = 'github';
+        let _settingsData = {};
+
+        function openSettings() {
+            const overlay = $('settings-overlay');
+            const panel = $('settings-panel');
+            overlay.style.display = 'block';
+            requestAnimationFrame(() => { panel.style.transform = 'translateX(0)'; });
+            _renderSettingsTabs();
+            loadSettings();
+        }
+
+        function closeSettings() {
+            const panel = $('settings-panel');
+            panel.style.transform = 'translateX(100%)';
+            setTimeout(() => { $('settings-overlay').style.display = 'none'; }, 260);
+        }
+
+        function _renderSettingsTabs() {
+            $('settings-tabs').innerHTML = SETTINGS_GROUPS.map(g => `
+                <button id="stab-${g.id}" onclick="switchSettingsTab('${g.id}')"
+                    class="px-3 py-1.5 rounded text-xs font-medium whitespace-nowrap transition-colors"
+                    style="background:${_settingsActive === g.id ? '#0369a1' : 'transparent'};
+                           color:${_settingsActive === g.id ? '#fff' : '#94a3b8'};
+                           border:1px solid ${_settingsActive === g.id ? '#0284c7' : 'transparent'}">
+                    ${g.icon} ${g.label}
+                </button>`).join('');
+        }
+
+        function switchSettingsTab(groupId) {
+            _settingsActive = groupId;
+            _renderSettingsTabs();
+            _renderSettingsContent();
+        }
+
+        async function loadSettings() {
+            $('settings-status').textContent = 'Loading…';
+            $('settings-status').style.color = '#94a3b8';
+            try {
+                const resp = await fetch('/api/v1/settings');
+                _settingsData = await resp.json();
+                _renderSettingsContent();
+                $('settings-status').textContent = '✓ Settings loaded';
+                $('settings-status').style.color = '#4ade80';
+                setTimeout(() => { if ($('settings-status')) $('settings-status').textContent = ''; }, 2500);
+            } catch (e) {
+                $('settings-status').textContent = '✗ Failed to load: ' + e.message;
+                $('settings-status').style.color = '#f87171';
+            }
+        }
+
+        function _renderSettingsContent() {
+            const group = SETTINGS_GROUPS.find(g => g.id === _settingsActive);
+            if (!group) return;
+            let extra = '';
+            if (group.id === 'sharepoint') extra = _renderSharePointInfoPanel();
+            $('settings-content').innerHTML = extra + group.fields.map(f => _renderField(f)).join('');
+            // Apply initial toggle track colors
+            group.fields.filter(f => f.type === 'bool').forEach(f => {
+                const cb = $(`sf-${f.key}`);
+                const track = $(`stoggle-${f.key}`);
+                if (track && cb) track.style.background = cb.checked ? '#0369a1' : '#334155';
+            });
+        }
+
+        function _renderSharePointInfoPanel() {
+            const d = _settingsData;
+            const configured = d.sharepoint_tenant_id && d.sharepoint_client_id &&
+                d.sharepoint_client_secret && d.sharepoint_site_url;
+            const folder = d.sharepoint_folder_path || 'Shared Documents/VEX-Store';
+            const projKey = d.jira_project_key || '&lt;PROJECT&gt;';
+            const siteUrl = d.sharepoint_site_url || '';
+
+            const statusBadge = configured
+                ? '<span style="background:#14532d;color:#bbf7d0;border:1px solid #166534" class="badge">✓ Configured</span>'
+                : '<span style="background:#450a0a;color:#fca5a5;border:1px solid #7f1d1d" class="badge">⚠ Not configured</span>';
+
+            return `
+            <div class="rounded-lg p-4 mb-2" style="background:#0c1929;border:1px solid #1e4976">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg">☁️</span>
+                        <span class="text-sm font-bold text-sky-300">SharePoint Storage</span>
+                        ${statusBadge}
+                    </div>
+                    <button id="sp-test-btn" onclick="testSharePointConnection()"
+                        class="px-3 py-1.5 rounded text-xs font-semibold transition-colors"
+                        style="background:#0369a1;color:#fff"
+                        onmouseover="this.style.background='#0284c7'"
+                        onmouseout="this.style.background='#0369a1'">
+                        🔌 Test Connection
+                    </button>
+                </div>
+
+                <!-- Test result area -->
+                <div id="sp-test-result" class="mb-3" style="display:none"></div>
+
+                <!-- Storage path preview -->
+                <div class="rounded p-3 mb-3" style="background:#1e293b;border:1px solid #334155">
+                    <div class="text-xs font-semibold text-slate-300 mb-2">📂 Storage Path Structure</div>
+                    <div class="font-mono text-xs text-slate-300 space-y-0.5">
+                        <div><span style="color:#7dd3fc">${siteUrl || '&lt;SHAREPOINT_SITE_URL&gt;'}</span></div>
+                        <div class="pl-3"><span style="color:#c4b5fd">${folder}/</span></div>
+                        <div class="pl-6"><span style="color:#fcd34d">${projKey}/</span></div>
+                        <div class="pl-9"><span style="color:#86efac">{product_version}/</span></div>
+                        <div class="pl-12 text-slate-400">vex-report-{date}.cdx.json</div>
+                        <div class="pl-12 text-slate-400">sbom-{repo}.cdx.json</div>
+                    </div>
+                </div>
+
+                <!-- Setup guide -->
+                <details class="text-xs">
+                    <summary class="cursor-pointer text-sky-400 hover:text-sky-300 select-none font-medium">📋 Setup Guide — Azure AD App Registration</summary>
+                    <ol class="mt-2 space-y-1.5 text-slate-400 pl-4 list-decimal">
+                        <li>Go to <span class="text-slate-200">Azure Portal → Azure Active Directory → App registrations → New registration</span></li>
+                        <li>Note the <span class="text-sky-300">Application (client) ID</span> — paste into <em>Client ID</em> above</li>
+                        <li>Note the <span class="text-sky-300">Directory (tenant) ID</span> — paste into <em>Tenant ID</em> above</li>
+                        <li>Go to <span class="text-slate-200">Certificates &amp; secrets → New client secret</span> — paste value into <em>Client Secret</em> above</li>
+                        <li>Go to <span class="text-slate-200">API permissions → Add permission → Microsoft Graph → Application permissions</span><br>
+                            Add <code class="bg-slate-800 px-1 rounded">Sites.ReadWrite.All</code> (or <code class="bg-slate-800 px-1 rounded">Files.ReadWrite.All</code>)<br>
+                            Then click <span class="text-amber-400">Grant admin consent</span></li>
+                        <li>Set <em>Site URL</em> to your SharePoint site, e.g. <code class="bg-slate-800 px-1 rounded">https://myorg.sharepoint.com/sites/Security</code></li>
+                        <li>Click <span class="text-sky-300">🔌 Test Connection</span> to verify everything works</li>
+                    </ol>
+                </details>
+            </div>`;
+        }
+
+        async function testSharePointConnection() {
+            const btn = $('sp-test-btn');
+            const resultEl = $('sp-test-result');
+            if (!btn || !resultEl) return;
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Testing…';
+            resultEl.style.display = 'block';
+            resultEl.innerHTML = '<div class="text-xs text-slate-400">Connecting to Azure AD…</div>';
+
+            // Collect current field values (unsaved values included)
+            const payload = {};
+            ['sharepoint_tenant_id', 'sharepoint_client_id', 'sharepoint_client_secret',
+                'sharepoint_site_url', 'sharepoint_folder_path', 'jira_project_key'].forEach(k => {
+                    const el = $(`sf-${k}`);
+                    if (el && el.value && el.value !== _SETTINGS_MASK) payload[k] = el.value;
+                });
+
+            try {
+                const resp = await fetch('/api/v1/settings/sharepoint/test', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+                const data = await resp.json();
+
+                const stagesHtml = (data.stages || []).map(s => `
+                    <div class="flex items-start gap-2 py-1" style="border-bottom:1px solid #1e293b">
+                        <span style="color:${s.ok ? '#4ade80' : '#f87171'};flex-shrink:0">${s.ok ? '✓' : '✗'}</span>
+                        <span class="font-medium text-slate-200 w-32 flex-shrink-0">${s.name}</span>
+                        <span class="text-slate-400">${s.detail || ''}</span>
+                    </div>`).join('');
+
+                const overall = data.ok
+                    ? '<div class="text-xs font-semibold text-green-400 mb-2">✓ SharePoint connection successful</div>'
+                    : `<div class="text-xs font-semibold text-red-400 mb-2">✗ Connection failed: ${data.error || 'unknown error'}</div>`;
+
+                resultEl.innerHTML = `
+                    <div class="rounded p-3 text-xs" style="background:#1e293b;border:1px solid ${data.ok ? '#166534' : '#7f1d1d'}">
+                        ${overall}${stagesHtml}
+                    </div>`;
+            } catch (e) {
+                resultEl.innerHTML = `<div class="text-xs text-red-400 p-2 rounded" style="background:#450a0a">✗ Request failed: ${e.message}</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🔌 Test Connection';
+            }
+        }
+
+        function _renderField(f) {
+            const raw = _settingsData[f.key];
+            const isBool = f.type === 'bool';
+            const isSelect = f.type === 'select';
+            const isPassword = f.type === 'password';
+
+            let displayVal = raw == null ? '' : String(raw);
+            if (isPassword && raw) displayVal = _SETTINGS_MASK;
+            if (isPassword && !raw) displayVal = '';
+
+            let inputHtml = '';
+            if (isBool) {
+                const checked = (raw === true || raw === 'true') ? 'checked' : '';
+                inputHtml = `
+                    <label class="inline-flex items-center gap-3 cursor-pointer select-none">
+                        <div class="relative">
+                            <input type="checkbox" id="sf-${f.key}" ${checked}
+                                class="sr-only peer" onchange="_markDirty('${f.key}')">
+                            <div id="stoggle-${f.key}"
+                                class="w-10 h-5 rounded-full transition-colors flex items-center">
+                                <div id="stoggle-thumb-${f.key}"
+                                    class="w-4 h-4 rounded-full bg-white transition-transform ml-0.5"
+                                    style="transform:translateX(${(raw === true || raw === 'true') ? '20px' : '0px'})"></div>
+                            </div>
+                        </div>
+                        <span id="stoggle-label-${f.key}" class="text-xs font-medium text-slate-300">
+                            ${(raw === true || raw === 'true') ? 'Enabled' : 'Disabled'}
+                        </span>
+                    </label>`;
+            } else if (isSelect) {
+                inputHtml = `
+                    <select id="sf-${f.key}" onchange="_markDirty('${f.key}')"
+                        class="w-full px-3 py-2 rounded-md text-sm bg-slate-800 border border-slate-600
+                               text-slate-200 focus:outline-none focus:border-sky-500">
+                        ${(f.options || []).map(o =>
+                    `<option value="${_esc(o)}" ${displayVal === o ? 'selected' : ''}>${_esc(o)}</option>`
+                ).join('')}
+                    </select>`;
+            } else {
+                const inputType = f.type === 'number' ? 'number' : 'text';
+                const step = f.type === 'float' ? 'step="0.001"' : '';
+                const min = f.type === 'float' ? 'min="0" max="1"' : '';
+                inputHtml = `
+                    <input id="sf-${f.key}" type="${inputType}" value="${_esc(displayVal)}"
+                        placeholder="${_esc(f.placeholder || '')}" ${step} ${min}
+                        oninput="_markDirty('${f.key}')"
+                        ${isPassword ? `onfocus="if(this.value===_SETTINGS_MASK)this.value=''"` : ''}
+                        ${isPassword ? `onblur="if(!this.value&&_settingsData['${f.key}'])this.value=_SETTINGS_MASK"` : ''}
+                        class="w-full px-3 py-2 rounded-md text-sm bg-slate-800 border border-slate-600
+                               text-slate-200 placeholder-slate-600 focus:outline-none focus:border-sky-500
+                               font-mono" />`;
+            }
+
+            return `
+                <div id="sfield-${f.key}" class="rounded-lg p-4 transition-all"
+                     style="background:#1e293b;border:1px solid #334155">
+                    <div class="flex items-start justify-between gap-4 mb-2">
+                        <label for="sf-${f.key}" class="text-xs font-semibold text-slate-200 cursor-pointer">${_esc(f.label)}</label>
+                        ${isPassword ? '<span class="text-xs text-amber-500 flex-shrink-0 select-none">🔒 sensitive</span>' : ''}
+                    </div>
+                    <div class="mb-2">${inputHtml}</div>
+                    <p class="text-xs text-slate-500 leading-relaxed">${f.desc}</p>
+                </div>`;
+        }
+
+        function _esc(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function _markDirty(key) {
+            const el = $(`sfield-${key}`);
+            if (el) { el.style.borderColor = '#0ea5e9'; el.style.background = '#0c1929'; }
+            // Sync toggle visuals
+            const cb = $(`sf-${key}`);
+            if (cb && cb.type === 'checkbox') {
+                const lbl = $(`stoggle-label-${key}`);
+                const track = $(`stoggle-${key}`);
+                const thumb = $(`stoggle-thumb-${key}`);
+                if (lbl) lbl.textContent = cb.checked ? 'Enabled' : 'Disabled';
+                if (track) track.style.background = cb.checked ? '#0369a1' : '#334155';
+                if (thumb) thumb.style.transform = `translateX(${cb.checked ? '20px' : '0px'})`;
+            }
+        }
+
+        async function saveSettings() {
+            const btn = $('settings-save-btn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Saving…';
+            $('settings-status').textContent = 'Saving settings…';
+            $('settings-status').style.color = '#94a3b8';
+
+            // Collect values from ALL groups (not just active tab)
+            const payload = {};
+            SETTINGS_GROUPS.forEach(group => {
+                group.fields.forEach(f => {
+                    const el = $(`sf-${f.key}`);
+                    if (!el) return;
+                    if (f.type === 'bool') {
+                        payload[f.key] = el.checked;
+                    } else if (f.type === 'number') {
+                        payload[f.key] = el.value !== '' ? Number(el.value) : null;
+                    } else if (f.type === 'float') {
+                        payload[f.key] = el.value !== '' ? parseFloat(el.value) : null;
+                    } else {
+                        payload[f.key] = el.value;
+                    }
+                });
+            });
+
+            try {
+                const resp = await fetch('/api/v1/settings', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+                const data = await resp.json();
+                if (!resp.ok) throw new Error(data.detail || resp.statusText);
+
+                // Reset dirty indicators for saved fields
+                data.updated.forEach(k => {
+                    const el = $(`sfield-${k}`);
+                    if (el) { el.style.borderColor = '#334155'; el.style.background = '#1e293b'; }
+                });
+
+                const restartKeys = ['host', 'port', 'log_level'];
+                const restartNeeded = restartKeys.some(k => data.updated.includes(k));
+                $('settings-status').innerHTML =
+                    `✓ ${data.count} setting${data.count !== 1 ? 's' : ''} saved` +
+                    (restartNeeded
+                        ? ' &nbsp;<span style="color:#fbbf24">⚠ Server restart required for some changes</span>'
+                        : '');
+                $('settings-status').style.color = '#4ade80';
+
+                // Refresh from server and re-render if tab visible
+                const fresh = await fetch('/api/v1/settings');
+                _settingsData = await fresh.json();
+                _renderSettingsContent();
+                _renderSettingsTabs();
+                setTimeout(() => refresh(), 300);
+            } catch (e) {
+                $('settings-status').textContent = '✗ Save failed: ' + e.message;
+                $('settings-status').style.color = '#f87171';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '💾 Save & Apply';
+            }
+        }
+
+        const DECISION_LABELS = {
+            not_affected_dev_only: 'Not Affected (Dev)',
+            not_affected_dead_code: 'Not Affected (Dead Code)',
+            affected_reachable: 'Affected / Reachable',
+            break_the_build: 'Break the Build',
+            under_investigation: 'Under Investigation',
+            pending_review: 'Unaffected/UnReachable',
+            skipped_duplicate: 'Duplicate Skipped',
+        };
+        const DECISION_COLORS = {
+            not_affected_dev_only: '#16a34a',
+            not_affected_dead_code: '#22c55e',
+            affected_reachable: '#f97316',
+            break_the_build: '#ef4444',
+            under_investigation: '#3b82f6',
+            pending_review: '#a855f7',
+            skipped_duplicate: '#64748b',
+        };
+        const SEV_COLORS = {
+            critical: '#ef4444', high: '#f97316', medium: '#eab308',
+            low: '#22c55e', informational: '#64748b',
+        };
+
+        // ── Chart instances ───────────────────────────────────────────────
+        let decisionChart = null;
+        let severityChart = null;
+
+        function buildCharts(stats) {
+            const decisions = stats.decisions || {};
+            const severities = stats.severities || {};
+
+            // ── Decision donut ──────────────────────────────────────────
+            const decLabels = Object.keys(decisions).map(k => DECISION_LABELS[k] || k);
+            const decVals = Object.values(decisions);
+            const decColors = Object.keys(decisions).map(k => DECISION_COLORS[k] || '#64748b');
+
+            if (decisionChart) {
+                decisionChart.data.labels = decLabels;
+                decisionChart.data.datasets[0].data = decVals;
+                decisionChart.data.datasets[0].backgroundColor = decColors;
+                decisionChart.update('none');
+            } else {
+                const ctx = document.getElementById('decisionChart').getContext('2d');
+                decisionChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: decLabels, datasets: [{
+                            data: decVals, backgroundColor: decColors,
+                            borderColor: '#0f172a', borderWidth: 3, hoverOffset: 6
+                        }]
+                    },
+                    options: {
+                        cutout: '62%',
+                        plugins: {
+                            legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 }, boxWidth: 12, padding: 10 } },
+                            tooltip: {
+                                callbacks: {
+                                    label: ctx => ` ${ctx.parsed} runs (${Math.round(ctx.parsed / decVals.reduce((a, b) => a +
+                                        b, 0) * 100)}%)`
+                                }
+                            },
+                        },
+                        animation: { animateRotate: true, duration: 500 },
+                        onClick: (evt, elements) => {
+                            if (!elements.length) return;
+                            const decKey = Object.keys(decisions)[elements[0].index];
+                            if (decKey) openDrilldownByDecision(decKey);
+                        },
+                        onHover: (evt, elements) => {
+                            evt.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+                        },
+                    }
+                });
+            }
+
+            // ── Severity bar ────────────────────────────────────────────
+            const sevOrder = ['critical', 'high', 'medium', 'low', 'informational'];
+            const sevLabels = sevOrder.filter(s => severities[s] !== undefined);
+            const sevVals = sevLabels.map(s => severities[s]);
+            const sevColors = sevLabels.map(s => SEV_COLORS[s] || '#64748b');
+
+            if (severityChart) {
+                severityChart.data.labels = sevLabels.map(s => s.charAt(0).toUpperCase() + s.slice(1));
+                severityChart.data.datasets[0].data = sevVals;
+                severityChart.data.datasets[0].backgroundColor = sevColors;
+                severityChart.update('none');
+            } else {
+                const ctx2 = document.getElementById('severityChart').getContext('2d');
+                severityChart = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: sevLabels.map(s => s.charAt(0).toUpperCase() + s.slice(1)),
+                        datasets: [{
+                            data: sevVals, backgroundColor: sevColors,
+                            borderRadius: 5, borderSkipped: false,
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.x} findings` } } },
+                        scales: {
+                            x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { size: 11 } } },
+                            y: { grid: { display: false }, ticks: { color: '#cbd5e1', font: { size: 11 } } },
+                        },
+                        animation: { duration: 400 },
+                        onClick: (evt, elements) => {
+                            if (!elements.length) return;
+                            const sev = sevLabels[elements[0].index];
+                            if (sev) openDrilldownBySeverity(sev);
+                        },
+                        onHover: (evt, elements) => {
+                            evt.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+                        },
+                    }
+                });
+            }
+        }
+
+        // ── Stat cards ───────────────────────────────────────────────────
+        function buildStatCards(stats, pendingCount) {
+            const decisions = stats.decisions || {};
+            const get = k => decisions[k] || 0;
+
+            const cards = [
+                {
+                    label: 'Total Processed', value: stats.total_processed || 0, color: '#0ea5e9', icon: '📊',
+                    filter: null, title: 'All Processed Alerts'
+                },
+                {
+                    label: 'Affected / Reachable', value: get('affected_reachable'), color: '#f97316', icon: '⚠️',
+                    filter: r => r.decision === 'affected_reachable', title: 'Affected / Reachable Alerts'
+                },
+                {
+                    label: 'Break the Build', value: get('break_the_build'), color: '#ef4444', icon: '🚨',
+                    filter: r => r.decision === 'break_the_build', title: 'Break-the-Build Alerts'
+                },
+                {
+                    label: 'Under Investigation', value: get('under_investigation'), color: '#3b82f6', icon: '🔍',
+                    filter: r => r.decision === 'under_investigation', title: 'Under Investigation Alerts'
+                },
+                {
+                    label: 'Unaffected/UnReachable', value: get('pending_review') + get('not_affected_dev_only') + get('not_affected_dead_code'), color: '#a855f7', icon: '👥',
+                    filter: r => ['pending_review', 'not_affected_dev_only', 'not_affected_dead_code'].includes(r.decision), title: 'Unaffected/UnReachable Alerts'
+                },
+                {
+                    label: 'Duplicates Skipped', value: get('skipped_duplicate'), color: '#64748b', icon: '🔁',
+                    filter: r => r.decision === 'skipped_duplicate', title: 'Duplicate Alerts Skipped'
+                },
+            ];
+
+            const container = $('stat-cards');
+            container.innerHTML = cards.map((c, i) => `
+    <div class="card p-4 flex flex-col gap-1 fade-in"
+        style="cursor:pointer;transition:border-color .15s,box-shadow .15s" onclick="openDrilldown(${i})"
+        onmouseover="this.style.borderColor='${c.color}';this.style.boxShadow='0 0 0 1px ${c.color}40'"
+        onmouseout="this.style.borderColor='#334155';this.style.boxShadow='none'" title="Click to see details">
+        <div class="flex items-center justify-between">
+            <span class="text-xs text-slate-400 font-medium">${c.label}</span>
+            <span class="text-lg">${c.icon}</span>
+        </div>
+        <div class="text-3xl font-bold" style="color:${c.color}">${c.value.toLocaleString()}</div>
+        <div class="h-1 rounded-full mt-1" style="background:${c.color}22">
+            <div class="h-1 rounded-full transition-all"
+                style="background:${c.color};width:${Math.min(100, (c.value / (stats.total_processed || 1)) * 100)}%">
+            </div>
+        </div>
+        <div class="text-xs mt-1" style="color:${c.color}99">View details →</div>
+    </div>
+    `).join('');
+
+            window.__statCards = cards;
+        }
+
+        // ── Pipeline runs table ──────────────────────────────────────────
+        const PIPE_TYPE_COLORS = {
+            dependabot: { bg: '#1e3a5f', fg: '#7dd3fc' },
+            code_scanning: { bg: '#2d1b4e', fg: '#c4b5fd' },
+            secret_scanning: { bg: '#4c1d1d', fg: '#fca5a5' },
+        };
+        const PIPE_TYPE_ICONS = { dependabot: '🤖', code_scanning: '🔬', secret_scanning: '🔑' };
+
+        function buildPipelineTable(runs) {
+            $('pipeline-count').textContent = `${runs.length} recent`;
+            const tbody = $('pipeline-table');
+            if (!runs.length) {
+                tbody.innerHTML = '<tr><td colspan="6" class="py-6 text-center text-slate-600 italic">No runs recorded yet</td></tr>';
+                return;
+            }
+            // Sort by alert_type (grouped by type) by default
+            const sorted = [...runs].sort((a, b) => {
+                const ta = (a.alert_type || '').toLowerCase();
+                const tb = (b.alert_type || '').toLowerCase();
+                return ta.localeCompare(tb);
+            });
+            tbody.innerHTML = sorted.map((r, i) => {
+                const decKey = (r.decision || '').replace(/-/g, '_');
+                const sevKey = (r.severity || '').toLowerCase();
+                const typeKey = (r.alert_type || '').toLowerCase();
+                const tc = PIPE_TYPE_COLORS[typeKey] || { bg: '#1e293b', fg: '#94a3b8' };
+                const jira = r.jira_key
+                    ? `<a href="${(window.__jira_base_url || '').replace(/\/$/, '')}/browse/${r.jira_key}" target="_blank"
+        class="text-sky-400 hover:underline">${r.jira_key}</a>`
+                    : '<span class="text-slate-600">—</span>';
+                const errBadge = r.errors && r.errors.length
+                    ? `<span class="ml-1 badge" style="background:#450a0a;color:#fca5a5">⚠ ${r.errors.length}</span>` : '';
+                return `
+    <tr class="${i === 0 ? 'fade-in' : ''}" style="border-bottom:1px solid #1e293b">
+        <td class="py-2 pr-3 text-slate-400 whitespace-nowrap">${fmt_ts(r.timestamp)}</td>
+        <td class="py-2 pr-3"><span class="badge" style="background:${tc.bg};color:${tc.fg}">${PIPE_TYPE_ICONS[typeKey] || ''} ${typeKey.replace('_', ' ')}</span></td>
+        <td class="py-2 pr-3">
+            <div class="font-medium text-slate-200 truncate max-w-xs">${r.package_name || '—'}</div>
+            <div class="text-slate-500">${r.cve_id || '—'}</div>
+        </td>
+        <td class="py-2 pr-3"><span class="badge s-${sevKey}">${r.severity || '—'}</span></td>
+        <td class="py-2 pr-3">
+            <span class="badge d-${decKey}">${DECISION_LABELS[decKey] || r.decision || '—'}</span>
+            ${errBadge}
+        </td>
+        <td class="py-2">${jira}</td>
+    </tr>`;
+            }).join('');
+        }
+
+        // ── Unaffected/UnReachable table ────────────────────────────────
+        let _isRepoAdmin = false;
+
+        function _updateActionsColumnVisibility() {
+            document.querySelectorAll('.review-actions-col').forEach(el => {
+                el.style.display = _isRepoAdmin ? '' : 'none';
+            });
+        }
+
+        // ── Review action modal ─────────────────────────────────────────
+        let _reviewModalTimer = null;
+
+        function _factRow(label, value, colour) {
+            const c = colour || '#e2e8f0';
+            return `<div class="flex justify-between" style="border-bottom:1px solid #1e293b;padding-bottom:6px">
+                <span class="text-slate-500 text-xs font-medium" style="min-width:120px">${label}</span>
+                <span class="text-xs font-semibold text-right" style="color:${c}">${value}</span>
+            </div>`;
+        }
+
+        function showReviewModal({ action, decision, facts }) {
+            const overlay = $('review-modal-overlay');
+            const card = $('review-modal-card');
+            const outcomeEl = $('review-modal-outcome');
+            const headerEl = $('review-modal-header');
+
+            if (action === 'approve') {
+                outcomeEl.textContent = '✅ Approved — confirmed not affected. Dismissed GHAS alert';
+                outcomeEl.style.color = '#4ade80';
+                headerEl.style.borderLeft = '4px solid #22c55e';
+            } else if (action === 'dismiss') {
+                outcomeEl.textContent = '❌ Review DISMISSED';
+                outcomeEl.style.color = '#f87171';
+                headerEl.style.borderLeft = '4px solid #ef4444';
+            } else {
+                outcomeEl.textContent = '⚠️ Error';
+                outcomeEl.style.color = '#fbbf24';
+                headerEl.style.borderLeft = '4px solid #eab308';
+            }
+
+            $('review-modal-facts').innerHTML = facts.map(f => _factRow(f[0], f[1], f[2])).join('');
+
+            overlay.style.display = 'flex';
+            requestAnimationFrame(() => {
+                card.style.transform = 'scale(1)';
+                card.style.opacity = '1';
+            });
+            // Auto-close countdown (60 s)
+            let remaining = 60;
+            const timerEl = $('review-modal-timer');
+            timerEl.textContent = `Auto-closing in ${remaining}s`;
+            clearInterval(_reviewModalTimer);
+            _reviewModalTimer = setInterval(() => {
+                remaining--;
+                timerEl.textContent = `Auto-closing in ${remaining}s`;
+                if (remaining <= 0) closeReviewModal();
+            }, 1000);
+        }
+
+        function closeReviewModal() {
+            clearInterval(_reviewModalTimer);
+            _reviewModalTimer = null;
+            const card = $('review-modal-card');
+            card.style.transform = 'scale(.9)';
+            card.style.opacity = '0';
+            setTimeout(() => { $('review-modal-overlay').style.display = 'none'; }, 200);
+            refresh();
+        }
+
+        async function reviewAction(reviewId, action, btn) {
+            const d = btn.dataset;
+            const row = btn.closest('tr');
+            const btns = row ? row.querySelectorAll('button') : [btn];
+            btns.forEach(b => { b.disabled = true; b.style.opacity = '0.5'; });
+
+            try {
+                const resp = await fetch(`/review/${reviewId}/${action}`, { method: 'POST' });
+                const data = await resp.json().catch(() => null);
+
+                if (!resp.ok) {
+                    showReviewModal({
+                        action: 'error',
+                        decision: '',
+                        facts: [
+                            ['Error', data?.detail || resp.statusText || 'Unknown error', '#fbbf24'],
+                            ['HTTP Status', `${resp.status}`, '#fbbf24'],
+                        ],
+                    });
+                    btns.forEach(b => { b.disabled = false; b.style.opacity = '1'; });
+                    return;
+                }
+
+                const decisionLabel = DECISION_LABELS[(data.decision || '').replace(/-/g, '_')] || data.decision || '—';
+
+                if (action === 'approve') {
+                    showReviewModal({
+                        action: 'approve',
+                        decision: data.decision,
+                        facts: [
+                            ['Repository', d.repo || '—'],
+                            ['Package', d.pkg || '—'],
+                            ['Vulnerability', d.cve || 'N/A'],
+                            ['Final Decision', decisionLabel, '#4ade80'],
+                            ['Outcome', '✅ Approved — confirmed not affected. Dismissed GHAS alert', '#4ade80'],
+                        ],
+                    });
+                } else {
+                    showReviewModal({
+                        action: 'dismiss',
+                        decision: data.decision,
+                        facts: [
+                            ['Repository', d.repo || '—'],
+                            ['Package', d.pkg || '—'],
+                            ['Vulnerability', d.cve || 'N/A'],
+                            ['Final Decision', 'Under Investigation', '#f87171'],
+                            ['Outcome', '❌ Dismissed — moved to Under Investigation', '#f87171'],
+                        ],
+                    });
+                }
+            } catch (e) {
+                showReviewModal({
+                    action: 'error',
+                    decision: '',
+                    facts: [['Network Error', e.message, '#fbbf24']],
+                });
+                btns.forEach(b => { b.disabled = false; b.style.opacity = '1'; });
+            }
+        }
+
+        async function reviewActionDirect(alertId, action, btn) {
+            const d = btn.dataset;
+            const row = btn.closest('tr');
+            const btns = row ? row.querySelectorAll('button') : [btn];
+            btns.forEach(b => { b.disabled = true; b.style.opacity = '0.5'; });
+
+            try {
+                const resp = await fetch(`/api/v1/pipeline-run/${alertId}/${action}`, { method: 'POST' });
+                const data = await resp.json().catch(() => null);
+
+                if (!resp.ok) {
+                    showReviewModal({
+                        action: 'error',
+                        decision: '',
+                        facts: [
+                            ['Error', data?.detail || resp.statusText || 'Unknown error', '#fbbf24'],
+                            ['HTTP Status', `${resp.status}`, '#fbbf24'],
+                        ],
+                    });
+                    btns.forEach(b => { b.disabled = false; b.style.opacity = '1'; });
+                    return;
+                }
+
+                const decisionLabel = DECISION_LABELS[(data.decision || '').replace(/-/g, '_')] || data.decision || '—';
+
+                if (action === 'approve') {
+                    showReviewModal({
+                        action: 'approve',
+                        decision: data.decision,
+                        facts: [
+                            ['Repository', d.repo || '—'],
+                            ['Package', d.pkg || '—'],
+                            ['Vulnerability', d.cve || 'N/A'],
+                            ['Final Decision', decisionLabel, '#4ade80'],
+                            ['Outcome', '✅ Approved — confirmed not affected. Dismissed GHAS alert', '#4ade80'],
+                        ],
+                    });
+                } else {
+                    showReviewModal({
+                        action: 'dismiss',
+                        decision: data.decision,
+                        facts: [
+                            ['Repository', d.repo || '—'],
+                            ['Package', d.pkg || '—'],
+                            ['Vulnerability', d.cve || 'N/A'],
+                            ['Final Decision', 'Under Investigation', '#f87171'],
+                            ['Outcome', '❌ Dismissed — moved to Under Investigation', '#f87171'],
+                        ],
+                    });
+                }
+            } catch (e) {
+                showReviewModal({
+                    action: 'error',
+                    decision: '',
+                    facts: [['Network Error', e.message, '#fbbf24']],
+                });
+                btns.forEach(b => { b.disabled = false; b.style.opacity = '1'; });
+            }
+        }
+
+        function buildReviewsTable(reviews, base_url, allRuns) {
+            const colSpan = _isRepoAdmin ? 4 : 3;
+            const tbody = $('reviews-table');
+
+            // Merge pipeline runs with not_affected / pending_review decisions
+            // with any matching review-queue items (for approve/dismiss actions).
+            const _NA_DECISIONS = new Set(['pending_review', 'not_affected_dev_only', 'not_affected_dead_code']);
+            const naRuns = (allRuns || []).filter(r => _NA_DECISIONS.has(r.decision));
+
+            // Build review-queue lookup by alert_id for action buttons
+            const reviewByAlert = {};
+            (reviews || []).forEach(r => { reviewByAlert[r.alert_id] = r; });
+
+            $('review-count').textContent = `${naRuns.length} items`;
+
+            if (!naRuns.length) {
+                tbody.innerHTML = `<tr><td colspan="${colSpan}" class="py-6 text-center text-slate-600 italic">No unaffected/unreachable items \u2713</td></tr>`;
+                _updateActionsColumnVisibility();
+                return;
+            }
+
+            tbody.innerHTML = naRuns.map(run => {
+                const decKey = (run.decision || '').replace(/-/g, '_');
+                const rev = reviewByAlert[run.alert_id];  // may be undefined
+                const just = run.justification || (rev && rev.trigger_reason) || '';
+                const justHtml = just ? just.replace(/</g, '&lt;').replace(/>/g, '&gt;') : '<span class="text-slate-600">\u2014</span>';
+                const pkg = run.package_name || '\u2014';
+                const cve = run.cve_id || '\u2014';
+                const repo = run.repo || '';
+
+                let actionsHtml = '';
+                if (_isRepoAdmin && rev) {
+                    // Has a review-queue entry → show approve/dismiss buttons
+                    actionsHtml = `<td class="py-2 review-actions-col">
+            <div class="flex flex-col gap-1">
+                <button onclick="reviewAction('${rev.id}','approve',this)"
+                    data-pkg="${pkg.replace(/"/g, '&quot;')}"
+                    data-cve="${(cve === '\u2014' ? 'N/A' : cve).replace(/"/g, '&quot;')}"
+                    data-repo="${repo.replace(/"/g, '&quot;')}"
+                    data-agent-dec="${rev.agent_decision || run.decision || ''}"
+                    data-conf="${rev.confidence || ''}"
+                    data-trigger="${((rev.trigger_reason || '').replace(/"/g, '&quot;'))}"
+                    class="px-2 py-0.5 rounded text-xs font-semibold bg-green-900 text-green-300 hover:bg-green-700 transition-colors text-center w-full">
+                    \u2713 Approve
+                </button>
+                <button onclick="reviewAction('${rev.id}','dismiss',this)"
+                    data-pkg="${pkg.replace(/"/g, '&quot;')}"
+                    data-cve="${(cve === '\u2014' ? 'N/A' : cve).replace(/"/g, '&quot;')}"
+                    data-repo="${repo.replace(/"/g, '&quot;')}"
+                    data-agent-dec="${rev.agent_decision || run.decision || ''}"
+                    data-conf="${rev.confidence || ''}"
+                    data-trigger="${((rev.trigger_reason || '').replace(/"/g, '&quot;'))}"
+                    class="px-2 py-0.5 rounded text-xs font-semibold bg-red-950 text-red-400 hover:bg-red-800 transition-colors text-center w-full">
+                    \u2717 Dismiss
+                </button>
+            </div>
+        </td>`;
+                } else if (_isRepoAdmin) {
+                    // No review-queue entry → auto-decided, show direct approve/dismiss
+                    actionsHtml = `<td class="py-2 review-actions-col">
+            <div class="flex flex-col gap-1">
+                <button onclick="reviewActionDirect('${(run.alert_id || '').toString().replace(/'/g, "\\'")}','approve',this)"
+                    data-pkg="${pkg.replace(/"/g, '&quot;')}"
+                    data-cve="${(cve === '\u2014' ? 'N/A' : cve).replace(/"/g, '&quot;')}"
+                    data-repo="${repo.replace(/"/g, '&quot;')}"
+                    class="px-2 py-0.5 rounded text-xs font-semibold bg-green-900 text-green-300 hover:bg-green-700 transition-colors text-center w-full">
+                    \u2713 Approve
+                </button>
+                <button onclick="reviewActionDirect('${(run.alert_id || '').toString().replace(/'/g, "\\'")}','dismiss',this)"
+                    data-pkg="${pkg.replace(/"/g, '&quot;')}"
+                    data-cve="${(cve === '\u2014' ? 'N/A' : cve).replace(/"/g, '&quot;')}"
+                    data-repo="${repo.replace(/"/g, '&quot;')}"
+                    class="px-2 py-0.5 rounded text-xs font-semibold bg-red-950 text-red-400 hover:bg-red-800 transition-colors text-center w-full">
+                    \u2717 Dismiss
+                </button>
+            </div>
+        </td>`;
+                }
+
+                return `
+    <tr style="border-bottom:1px solid #1e293b">
+        <td class="py-2 pr-3">
+            <div class="font-medium text-slate-200">${pkg}</div>
+            <div class="text-slate-500">${cve}</div>
+            <div class="text-slate-600 text-xs truncate max-w-[130px]">${repo}</div>
+        </td>
+        <td class="py-2 pr-3">
+            <span class="badge d-${decKey}">${DECISION_LABELS[decKey] || run.decision || '\u2014'}</span>
+        </td>
+        <td class="py-2 pr-3 text-slate-400 text-xs whitespace-pre-line max-w-sm" title="${just.replace(/\n/g, '  ')}">${justHtml}</td>
+        ${actionsHtml}
+    </tr>`;
+            }).join('');
+            _updateActionsColumnVisibility();
+        }
+
+        // ── Last report card ─────────────────────────────────────────────
+        function buildReportCard(report) {
+            const body = $('report-body');
+            if (!report) {
+                body.innerHTML = '<span class="text-slate-600 italic text-sm">No reports run yet</span>';
+                return;
+            }
+            body.innerHTML = `
+    <div class="w-full space-y-2 text-sm">
+        <div class="flex justify-between text-slate-400">
+            <span>Timestamp</span><span class="text-slate-200 font-mono text-xs">${fmt_dt(report.timestamp)}</span>
+        </div>
+        <div class="flex justify-between text-slate-400">
+            <span>Version</span><span class="text-sky-400 font-semibold">${report.product_version || '—'}</span>
+        </div>
+        <div class="flex justify-between text-slate-400">
+            <span>SBOM</span><span class="${report.sbom_generated ? 'text-green-400' : 'text-red-400'}">
+                ${report.sbom_generated ? '✓ Generated' : '✗ Failed'}</span>
+        </div>
+        <hr class="border-slate-700" />
+        <div class="grid grid-cols-3 gap-2 text-center text-xs">
+            <div class="card p-2 rounded-lg">
+                <div class="text-orange-400 font-bold text-lg">${report.dependabot_count}</div>
+                <div class="text-slate-500">Dependabot</div>
+            </div>
+            <div class="card p-2 rounded-lg">
+                <div class="text-yellow-400 font-bold text-lg">${report.code_scan_count}</div>
+                <div class="text-slate-500">Code Scan</div>
+            </div>
+            <div class="card p-2 rounded-lg">
+                <div class="text-red-400 font-bold text-lg">${report.secret_count}</div>
+                <div class="text-slate-500">Secrets</div>
+            </div>
+        </div>
+        <div class="text-slate-400 text-xs">
+            <span class="text-slate-300 font-semibold">${report.total_alerts}</span> total alerts in VEX
+        </div>
+        ${report.saved_files && report.saved_files.length ? `
+        <div class="text-slate-500 text-xs mt-1 space-y-0.5">
+            ${report.saved_files.map(f => `<div class="truncate" title="${f}">📄
+                …/${f.split(/[\\/]/).slice(-2).join('/')}</div>`).join('')}
+        </div>` : ''}
+    </div>`;
+        }
+
+        // ── Drilldown state ──────────────────────────────────────────────
+        let _drillFilter = null;
+        let _drillTitle = '';
+        let _drillSort = { key: 'alert_type', asc: true };
+        const SEV_ORDER = { critical: 0, high: 1, medium: 2, low: 3, informational: 4 };
+
+        function openDrilldown(cardIndex) {
+            const card = (window.__statCards || [])[cardIndex];
+            if (!card) return;
+
+            _drillFilter = card.filter;
+            _drillTitle = card.title;
+            $('drilldown-title').textContent = card.icon + ' ' + card.title;
+            $('drilldown-search').value = '';
+            $('drilldown-sev').value = '';
+            $('drilldown-type').value = '';
+            _drillSort = { key: 'alert_type', asc: true };
+            renderDrilldownTable();
+
+            const overlay = $('drilldown-overlay');
+            const panel = $('drilldown-panel');
+            overlay.style.display = 'block';
+            requestAnimationFrame(() => {
+                panel.style.transform = 'translateX(0)';
+            });
+        }
+
+        // Also callable from chart clicks: openDrilldownByDecision('break_the_build')
+        function openDrilldownByDecision(decisionKey) {
+            const card = (window.__statCards || []).find(c =>
+                c.filter && c.filter({ decision: decisionKey, severity: 'medium', alert_type: 'dependabot' })
+            );
+            const idx = card ? (window.__statCards || []).indexOf(card) : null;
+            if (idx !== null && idx >= 0) openDrilldown(idx);
+        }
+
+        function openDrilldownBySeverity(sev) {
+            _drillFilter = null;
+            _drillTitle = sev.charAt(0).toUpperCase() + sev.slice(1) + ' Severity Alerts';
+            $('drilldown-title').textContent = '🔍 ' + _drillTitle;
+            $('drilldown-search').value = '';
+            $('drilldown-sev').value = sev;
+            $('drilldown-type').value = '';
+            _drillSort = { key: 'alert_type', asc: true };
+            renderDrilldownTable();
+
+            const overlay = $('drilldown-overlay');
+            overlay.style.display = 'block';
+            requestAnimationFrame(() => { $('drilldown-panel').style.transform = 'translateX(0)'; });
+        }
+
+        function closeDrilldown() {
+            const panel = $('drilldown-panel');
+            panel.style.transform = 'translateX(100%)';
+            setTimeout(() => { $('drilldown-overlay').style.display = 'none'; }, 260);
+        }
+
+        function sortDrilldown(key) {
+            if (_drillSort.key === key) _drillSort.asc = !_drillSort.asc;
+            else { _drillSort.key = key; _drillSort.asc = true; }
+            renderDrilldownTable();
+        }
+
+        function renderDrilldownTable() {
+            const all = window.__allRuns || [];
+            const search = ($('drilldown-search')?.value || '').toLowerCase();
+            const sev = $('drilldown-sev')?.value || '';
+            const type = $('drilldown-type')?.value || '';
+
+            let rows = _drillFilter ? all.filter(_drillFilter) : [...all];
+            if (sev) rows = rows.filter(r => (r.severity || '').toLowerCase() === sev);
+            if (type) rows = rows.filter(r => (r.alert_type || '').toLowerCase() === type);
+            if (search) rows = rows.filter(r =>
+                (r.package_name || '').toLowerCase().includes(search) ||
+                (r.cve_id || '').toLowerCase().includes(search) ||
+                (r.repo || '').toLowerCase().includes(search) ||
+                (r.decision || '').toLowerCase().includes(search)
+            );
+
+            // Sort
+            const { key, asc } = _drillSort;
+            rows.sort((a, b) => {
+                let va = a[key], vb = b[key];
+                if (key === 'severity') { va = SEV_ORDER[va] ?? 99; vb = SEV_ORDER[vb] ?? 99; }
+                if (va == null) va = '';
+                if (vb == null) vb = '';
+                const cmp = typeof va === 'number' ? va - vb : String(va).localeCompare(String(vb));
+                return asc ? cmp : -cmp;
+            });
+
+            // Summary chips
+            const decCounts = {};
+            rows.forEach(r => { const d = r.decision || 'unknown'; decCounts[d] = (decCounts[d] || 0) + 1; });
+            $('drilldown-chips').innerHTML = Object.entries(decCounts).map(([d, n]) => {
+                const label = DECISION_LABELS[d] || d;
+                const col = DECISION_COLORS[d] || '#64748b';
+                return `<span class="badge" style="background:${col}22;color:${col};border:1px solid ${col}44">${label}:
+        ${n}</span>`;
+            }).join('');
+
+            // Footer
+            const sevCounts = {};
+            rows.forEach(r => { const s = r.severity || 'unknown'; sevCounts[s] = (sevCounts[s] || 0) + 1; });
+            $('drilldown-subtitle').textContent = `${rows.length} alert${rows.length !== 1 ? 's' : ''}`;
+            $('drilldown-footer').textContent =
+                `Showing ${rows.length} of ${all.length} total runs · ` +
+                ['critical', 'high', 'medium', 'low'].filter(s => sevCounts[s]).map(s => `${s}: ${sevCounts[s]}`).join(' · ');
+
+            const tbody = $('drilldown-tbody');
+            if (!rows.length) {
+                tbody.innerHTML = '<tr><td colspan="12" class="py-10 text-center text-slate-600 italic">No matching alerts</td></tr>';
+                return;
+            }
+
+            const TYPE_COLORS = {
+                dependabot: { bg: '#1e3a5f', fg: '#7dd3fc' },
+                code_scanning: { bg: '#2d1b4e', fg: '#c4b5fd' },
+                secret_scanning: { bg: '#4c1d1d', fg: '#fca5a5' },
+            };
+            const TYPE_ICONS = { dependabot: '🤖', code_scanning: '🔬', secret_scanning: '🔑' };
+
+            tbody.innerHTML = rows.map((r, i) => {
+                const decKey = (r.decision || '').replace(/-/g, '_');
+                const sevKey = (r.severity || '').toLowerCase();
+                const typeKey = (r.alert_type || '').toLowerCase();
+                const tc = TYPE_COLORS[typeKey] || { bg: '#1e293b', fg: '#94a3b8' };
+                const jira = r.jira_key
+                    ? `<a href="${(window.__jira_base_url || '').replace(/\/$/, '')}/browse/${r.jira_key}" target="_blank"
+        class="text-sky-400 hover:underline">${r.jira_key}</a>`
+                    : '<span class="text-slate-600">—</span>';
+                const errBadge = r.errors && r.errors.length
+                    ? `<span title="${r.errors.join('\n')}" class="ml-1 badge" style="background:#450a0a;color:#fca5a5;cursor:help">⚠
+        ${r.errors.length}</span>` : '';
+                const reachBadge = r.reachable === true
+                    ? '<span class="badge" style="background:#7c2d12;color:#fecdd3">Yes</span>'
+                    : r.reachable === false
+                        ? '<span class="badge" style="background:#14532d;color:#bbf7d0">No</span>'
+                        : '<span class="text-slate-600">—</span>';
+                const epss = r.epss_score != null ? r.epss_score.toFixed(3) : '—';
+                const dur = r.duration_ms != null ? r.duration_ms + ' ms' : '';
+                return `
+    <tr class="${i === 0 ? 'fade-in' : ''}" style="border-bottom:1px solid #1a2535">
+        <td class="py-2 pr-3 text-slate-400 whitespace-nowrap">${fmt_ts(r.timestamp)}</td>
+        <td class="py-2 pr-3">
+            <span class="badge" style="background:${tc.bg};color:${tc.fg}">${TYPE_ICONS[typeKey] || ''}
+                ${typeKey.replace('_', ' ')}</span>
+        </td>
+        <td class="py-2 pr-3">
+            <div class="font-medium text-slate-200">${r.package_name || '—'}</div>
+            <div class="text-slate-500">${r.cve_id || '—'}</div>
+            ${dur ? `<div class="text-slate-600">${dur}</div>` : ''}
+        </td>
+        <td class="py-2 pr-3"><span class="badge s-${sevKey}">${r.severity || '—'}</span></td>
+        <td class="py-2 pr-3">
+            <span class="badge d-${decKey}">${DECISION_LABELS[decKey] || r.decision || '—'}</span>${errBadge}
+        </td>
+        <td class="py-2 pr-3 text-slate-300">${epss}</td>
+        <td class="py-2 pr-3">${reachBadge}</td>
+        <td class="py-2 pr-3 text-slate-500 text-xs truncate max-w-xs" title="${r.repo || ''}">${r.repo || '—'}</td>
+        <td class="py-2 pr-3">${jira}</td>
+        <td class="py-2 pr-3 text-slate-400 text-xs whitespace-pre-line" style="min-width:300px;max-width:500px" title="${(r.justification || '').replace(/\n/g, '  ')}">${r.justification ? r.justification.replace(/</g, '&lt;').replace(/>/g, '&gt;') : '<span class="text-slate-600">—</span>'}</td>
+        <td class="py-2 pr-3 text-emerald-400 text-xs whitespace-pre-line" style="min-width:300px;max-width:500px" title="${(r.suggested_fix || '').replace(/\n/g, '  ')}">${r.suggested_fix ? r.suggested_fix.replace(/</g, '&lt;').replace(/>/g, '&gt;') : '<span class="text-slate-600">—</span>'}</td>
+        <td class="py-2 text-xs whitespace-nowrap">${(() => {
+                        const lr = r.license_risk || '';
+                        if (!lr || lr === '—') return '<span class="text-slate-600">—</span>';
+                        const ll = lr.toLowerCase();
+                        if (ll.includes('critical') || ll.includes('agpl') || ll.includes('sspl'))
+                            return `<span class="badge" style="background:#450a0a;color:#fca5a5">${lr}</span>`;
+                        if (ll.includes('high') || ll.includes('gpl'))
+                            return `<span class="badge" style="background:#7c2d12;color:#fdba74">${lr}</span>`;
+                        if (ll.includes('medium') || ll.includes('lgpl') || ll.includes('mpl'))
+                            return `<span class="badge" style="background:#713f12;color:#fde68a">${lr}</span>`;
+                        if (ll.includes('unknown'))
+                            return `<span class="badge" style="background:#1e293b;color:#94a3b8">${lr}</span>`;
+                        if (ll.includes('✓') || ll.includes('none') || ll.includes('low'))
+                            return `<span class="badge" style="background:#14532d;color:#bbf7d0">${lr}</span>`;
+                        return `<span class="text-slate-400">${lr}</span>`;
+                    })()}</td>
+    </tr>`;
+            }).join('');
+        }
+
+        // ── Main refresh ─────────────────────────────────────────────────
+        let _refreshing = false;
+
+        async function refresh() {
+            if (_refreshing) return;
+            _refreshing = true;
+            const btn = $('refresh-btn');
+            btn.innerHTML = '<span class="spin inline-block">↺</span> Refreshing…';
+
+            try {
+                const [statsRes, runsRes, reviewsRes] = await Promise.all([
+                    fetch('/api/v1/stats'),
+                    fetch('/api/v1/pipeline-runs?limit=200'),
+                    fetch('/api/v1/reviews/pending'),
+                ]);
+
+                if (!statsRes.ok || !runsRes.ok || !reviewsRes.ok) throw new Error('API error');
+
+                const stats = await statsRes.json();
+                const runs = await runsRes.json();
+                const reviews = await reviewsRes.json();
+
+                window.__allRuns = runs; // cache for drilldown
+                window.__jira_base_url = stats.jira_base_url || '';
+                const base_url = stats.review_base_url || '';
+
+                buildStatCards(stats, reviews.length);
+                buildCharts(stats);
+                buildPipelineTable(runs.slice(0, 50));
+                buildReviewsTable(reviews, base_url, runs);
+                buildReportCard(stats.last_report);
+
+                // Re-render drilldown in place if it's open
+                if ($('drilldown-overlay').style.display !== 'none') renderDrilldownTable();
+
+                $('status-dot').className = 'w-2 h-2 rounded-full bg-green-400 live-dot';
+                $('status-text').textContent = 'Live';
+                $('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+            } catch (err) {
+                console.error(err);
+                $('status-dot').className = 'w-2 h-2 rounded-full bg-red-400';
+                $('status-text').textContent = 'Offline';
+            } finally {
+                btn.innerHTML = '↺ Refresh';
+                _refreshing = false;
+            }
+        }
+
+        // ── Export helpers ────────────────────────────────────────────────
+        async function exportSbom(btn) {
+            const statusEl = $('sbom-status');
+            btn.disabled = true;
+            btn.textContent = '⏳ Generating SBOM…';
+            statusEl.textContent = 'Scanning repository for dependencies…';
+            statusEl.style.color = '#94a3b8';
+            try {
+                const resp = await fetch('/api/v1/export/sbom');
+                if (!resp.ok) {
+                    const err = await resp.json().catch(() => ({ detail: resp.statusText }));
+                    throw new Error(err.detail || resp.statusText);
+                }
+                const blob = await resp.blob();
+                const cd = resp.headers.get('content-disposition') || '';
+                const fname = cd.match(/filename="([^"]+)"/)?.[1] || 'sbom.cdx.json';
+                _triggerDownload(blob, fname);
+                statusEl.textContent = '✓ Downloaded ' + fname;
+                statusEl.style.color = '#4ade80';
+            } catch (e) {
+                statusEl.textContent = '✗ ' + e.message;
+                statusEl.style.color = '#f87171';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '⬇ Download SBOM';
+            }
+        }
+
+        async function exportVex(btn) {
+            const statusEl = $('vex-status');
+            btn.disabled = true;
+            btn.textContent = '⏳ Fetching alerts…';
+            statusEl.textContent = 'Calling GitHub API for security alerts…';
+            statusEl.style.color = '#94a3b8';
+            try {
+                const resp = await fetch('/api/v1/export/vex-report');
+                if (!resp.ok) {
+                    const err = await resp.json().catch(() => ({ detail: resp.statusText }));
+                    throw new Error(err.detail || resp.statusText);
+                }
+                const blob = await resp.blob();
+                const cd = resp.headers.get('content-disposition') || '';
+                const fname = cd.match(/filename="([^"]+)"/)?.[1] || 'vex-report.cdx.json';
+                _triggerDownload(blob, fname);
+                statusEl.textContent = '✓ Downloaded ' + fname;
+                statusEl.style.color = '#4ade80';
+            } catch (e) {
+                statusEl.textContent = '✗ ' + e.message;
+                statusEl.style.color = '#f87171';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '⬇ Download VEX Report';
+            }
+        }
+
+        async function runFullReport(btn) {
+            const statusEl = $('report-run-status');
+            btn.disabled = true;
+            btn.textContent = '⏳ Running pipeline…';
+            statusEl.textContent = 'Generating SBOM + fetching alerts + pushing to SharePoint…';
+            statusEl.style.color = '#94a3b8';
+            try {
+                const resp = await fetch('/api/v1/export/run-report', { method: 'POST' });
+                const data = await resp.json();
+                if (!resp.ok) {
+                    throw new Error((data.errors || [data.detail]).join(', '));
+                }
+                const lines = [
+                    `✓ SBOM: ${data.sbom_generated ? 'generated' : 'failed'}`,
+                    `✓ Dependabot: ${data.dependabot_alerts} Code scan: ${data.code_scanning_alerts} Secrets:
+    ${data.secret_scanning_alerts}`,
+                    `✓ VEX vulnerabilities: ${data.total_alerts}`,
+                ];
+                if (data.saved_files && data.saved_files.length) {
+                    lines.push(`✓ Committed: ${data.saved_files.map(f => f.split(/[\\/]/).slice(-1)[0]).join(', ')}`);
+                }
+                statusEl.innerHTML = lines.map(l => `<div>${l}</div>`).join('');
+                statusEl.style.color = '#4ade80';
+                setTimeout(() => refresh(), 500); // refresh stats
+            } catch (e) {
+                statusEl.textContent = '✗ ' + e.message;
+                statusEl.style.color = '#f87171';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '▶ Run & Commit to Git';
+            }
+        }
+
+        async function exportAlertsExcel(btn) {
+            const statusEl = $('excel-status');
+            btn.disabled = true;
+            btn.textContent = '⏳ Generating Excel…';
+            statusEl.textContent = 'Building workbook from alert data…';
+            statusEl.style.color = '#94a3b8';
+            try {
+                const resp = await fetch('/api/v1/export/alerts-excel');
+                if (!resp.ok) {
+                    const err = await resp.json().catch(() => ({ detail: resp.statusText }));
+                    throw new Error(err.error || err.detail || resp.statusText);
+                }
+                const blob = await resp.blob();
+                const cd = resp.headers.get('content-disposition') || '';
+                const fname = cd.match(/filename="([^"]+)"/)?.[1] || 'github-alerts.xlsx';
+                _triggerDownload(blob, fname);
+                statusEl.textContent = '✓ Downloaded ' + fname;
+                statusEl.style.color = '#4ade80';
+            } catch (e) {
+                statusEl.textContent = '✗ ' + e.message;
+                statusEl.style.color = '#f87171';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '⬇ Download Excel (.xlsx)';
+            }
+        }
+
+        async function exportAlertsPdf(btn) {
+            const statusEl = $('pdf-status');
+            btn.disabled = true;
+            btn.textContent = '⏳ Generating PDF…';
+            statusEl.textContent = 'Building PDF report from alert data…';
+            statusEl.style.color = '#94a3b8';
+            try {
+                const resp = await fetch('/api/v1/export/alerts-pdf');
+                if (!resp.ok) {
+                    const err = await resp.json().catch(() => ({ detail: resp.statusText }));
+                    throw new Error(err.error || err.detail || resp.statusText);
+                }
+                const blob = await resp.blob();
+                const cd = resp.headers.get('content-disposition') || '';
+                const fname = cd.match(/filename="([^"]+)"/)?.[1] || 'github-alerts.pdf';
+                _triggerDownload(blob, fname);
+                statusEl.textContent = '✓ Downloaded ' + fname;
+                statusEl.style.color = '#4ade80';
+            } catch (e) {
+                statusEl.textContent = '✗ ' + e.message;
+                statusEl.style.color = '#f87171';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '⬇ Download PDF (.pdf)';
+            }
+        }
+
+        // ── Source Cache — one-time task ─────────────────────────────────
+        async function refreshSourceCacheStatus() {
+            try {
+                const resp = await fetch('/api/v1/source-cache/status');
+                if (!resp.ok) return;
+                const d = await resp.json();
+                const badge = $('sc-status-badge');
+                const details = $('sc-status-details');
+                if (d.preparing) {
+                    badge.textContent = 'Preparing…';
+                    badge.style.background = '#92400e';
+                    badge.style.color = '#fcd34d';
+                    details.style.display = 'none';
+                } else if (d.ready) {
+                    badge.textContent = 'Ready ✓';
+                    badge.style.background = '#166534';
+                    badge.style.color = '#86efac';
+                    details.style.display = '';
+                    $('sc-detail-repo').textContent = d.clone_url || '—';
+                    $('sc-detail-branch').textContent = d.branch || '—';
+                    $('sc-detail-sha').textContent = d.head_sha ? d.head_sha.substring(0, 12) : '—';
+                    $('sc-detail-files').textContent = d.file_count != null ? d.file_count.toLocaleString() : '—';
+                    $('sc-detail-time').textContent = d.prepared_at ? new Date(d.prepared_at).toLocaleString() : '—';
+                } else if (d.error) {
+                    badge.textContent = 'Error';
+                    badge.style.background = '#7f1d1d';
+                    badge.style.color = '#fca5a5';
+                    details.style.display = 'none';
+                    $('sc-action-status').textContent = '❌ ' + d.error;
+                    $('sc-action-status').style.color = '#f87171';
+                } else {
+                    badge.textContent = 'Not Ready';
+                    badge.style.background = '#991b1b';
+                    badge.style.color = '#fca5a5';
+                    details.style.display = 'none';
+                }
+            } catch (e) { /* ignore */ }
+        }
+
+        async function prepareSourceCache(force) {
+            const statusEl = $('sc-action-status');
+            const btn = force ? $('sc-force-btn') : $('sc-prepare-btn');
+            const origText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = '⏳ Preparing…';
+            statusEl.textContent = 'Cloning repository and building source cache…';
+            statusEl.style.color = '#fcd34d';
+
+            try {
+                const resp = await fetch(`/api/v1/source-cache/prepare?force=${force}`, { method: 'POST' });
+                const data = await resp.json();
+                if (resp.ok || resp.status === 202) {
+                    statusEl.textContent = '⏳ ' + (data.message || 'Preparation in progress…');
+                    statusEl.style.color = '#fcd34d';
+                    // Poll until ready or error
+                    const poll = setInterval(async () => {
+                        try {
+                            const sr = await fetch('/api/v1/source-cache/status');
+                            if (!sr.ok) return;
+                            const sd = await sr.json();
+                            if (sd.ready) {
+                                clearInterval(poll);
+                                statusEl.textContent = '✅ Source cache ready — ' + (sd.file_count || 0) + ' files cached.';
+                                statusEl.style.color = '#86efac';
+                                btn.disabled = false;
+                                btn.textContent = origText;
+                                await refreshSourceCacheStatus();
+                            } else if (sd.error) {
+                                clearInterval(poll);
+                                statusEl.textContent = '❌ ' + sd.error;
+                                statusEl.style.color = '#f87171';
+                                btn.disabled = false;
+                                btn.textContent = origText;
+                                await refreshSourceCacheStatus();
+                            }
+                        } catch (_) { /* continue polling */ }
+                    }, 3000);
+                } else if (resp.status === 409) {
+                    statusEl.textContent = '⏳ ' + (data.message || 'Preparation already in progress.');
+                    statusEl.style.color = '#fcd34d';
+                    btn.disabled = false;
+                    btn.textContent = origText;
+                } else {
+                    statusEl.textContent = '❌ ' + (data.message || 'Failed.');
+                    statusEl.style.color = '#f87171';
+                    btn.disabled = false;
+                    btn.textContent = origText;
+                }
+            } catch (e) {
+                statusEl.textContent = '❌ Network error: ' + e.message;
+                statusEl.style.color = '#f87171';
+                btn.disabled = false;
+                btn.textContent = origText;
+            }
+            await refreshSourceCacheStatus();
+        }
+
+        async function invalidateSourceCache() {
+            const statusEl = $('sc-action-status');
+            try {
+                const resp = await fetch('/api/v1/source-cache/invalidate', { method: 'POST' });
+                const data = await resp.json();
+                statusEl.textContent = '🗑 ' + (data.message || 'Cache invalidated.');
+                statusEl.style.color = '#94a3b8';
+            } catch (e) {
+                statusEl.textContent = '❌ Network error: ' + e.message;
+                statusEl.style.color = '#f87171';
+            }
+            await refreshSourceCacheStatus();
+        }
+
+        // Refresh cache status on page load and periodically
+        refreshSourceCacheStatus();
+        setInterval(refreshSourceCacheStatus, 10000);
+
+        // ── Export & Analyse — unified flow ──────────────────────────────
+        let _eaPollTimer = null;
+
+        async function exportAndAnalyse(btn) {
+            const statusEl = $('ea-status');
+            const progressWrap = $('ea-progress-wrap');
+            const fmt = document.querySelector('input[name="ea-format"]:checked')?.value || 'excel';
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Starting Export & Analyse…';
+            statusEl.textContent = 'Fetching alerts and starting analysis pipeline…';
+            statusEl.style.color = '#94a3b8';
+            progressWrap.classList.add('hidden');
+
+            try {
+                // Fire the long-running POST — start polling progress after a brief delay
+                const fetchPromise = fetch(`/api/v1/export/analyse?fmt=${fmt}`, { method: 'POST' });
+
+                // Wait 1s, then show progress bar & start polling (the POST is still running)
+                const pollDelay = new Promise(resolve => setTimeout(() => {
+                    progressWrap.classList.remove('hidden');
+                    _eaPollTimer = setInterval(_pollEaProgress, 800);
+                    resolve();
+                }, 1000));
+
+                // Wait for both the poll-start delay AND the actual response
+                const [, resp] = await Promise.all([pollDelay, fetchPromise]);
+
+                // Stop polling
+                clearInterval(_eaPollTimer);
+                _eaPollTimer = null;
+
+                const data = await resp.json().catch(() => ({ detail: resp.statusText }));
+                if (!resp.ok) {
+                    throw new Error(data.error || data.detail || resp.statusText);
+                }
+
+                // Update progress bar to 100%
+                $('ea-progress-bar').style.width = '100%';
+                $('ea-progress-pct').textContent = '100%';
+                $('ea-progress-phase').textContent = 'Completed!';
+
+                // Download raw export
+                statusEl.innerHTML = '⬇ Downloading raw alerts export…';
+                statusEl.style.color = '#7dd3fc';
+                await _downloadFromUrl(data.raw_download_url);
+
+                // Small delay, then download analysed export
+                await new Promise(r => setTimeout(r, 500));
+                statusEl.innerHTML = '⬇ Downloading analysed results export…';
+                await _downloadFromUrl(data.analysed_download_url);
+
+                // Download VEX CycloneDX file
+                if (data.vex_download_url) {
+                    await new Promise(r => setTimeout(r, 400));
+                    statusEl.innerHTML = '⬇ Downloading VEX CycloneDX document…';
+                    await _downloadFromUrl(data.vex_download_url);
+                }
+
+                // Download SBOM CycloneDX file
+                if (data.sbom_download_url) {
+                    await new Promise(r => setTimeout(r, 400));
+                    statusEl.innerHTML = '⬇ Downloading SBOM CycloneDX document…';
+                    await _downloadFromUrl(data.sbom_download_url);
+                }
+
+                // Build summary lines
+                let summaryParts = [
+                    `<div>\u2713 Raw alerts exported (${fmt.toUpperCase()})</div>`,
+                    `<div>\u2713 ${data.total} alerts analysed \u2014 ${data.affected} affected, ` +
+                    `${data.not_affected} not affected, ${data.errors} errors</div>`,
+                    `<div>\u2713 Analysed results exported (${fmt.toUpperCase()})</div>`,
+                ];
+                if (data.vex_files_generated) {
+                    summaryParts.push(`<div>\u2713 VEX CycloneDX generated (${data.vex_files_generated} vulnerabilities)</div>`);
+                }
+                if (data.sbom_generated) {
+                    summaryParts.push(`<div>\u2713 SBOM CycloneDX generated</div>`);
+                }
+                if (data.sharepoint_urls && data.sharepoint_urls.length > 0) {
+                    summaryParts.push(`<div>\u2713 Uploaded to SharePoint (${data.sharepoint_urls.length} file(s))</div>`);
+                } else if (data.sharepoint_error) {
+                    summaryParts.push(`<div style="color:#fbbf24">\u26a0 SharePoint: ${data.sharepoint_error}</div>`);
+                }
+                statusEl.innerHTML = `<div class="space-y-1">${summaryParts.join('')}</div>`;
+                statusEl.style.color = '#4ade80';
+                setTimeout(() => refresh(), 500);
+
+            } catch (e) {
+                clearInterval(_eaPollTimer);
+                _eaPollTimer = null;
+                progressWrap.classList.add('hidden');
+                statusEl.textContent = '✗ ' + e.message;
+                statusEl.style.color = '#f87171';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '▶ Export & Analyse';
+            }
+        }
+
+        async function _pollEaProgress() {
+            try {
+                const resp = await fetch('/api/v1/export/analyse-progress');
+                const d = await resp.json();
+                if (!d.active && d.phase === 'idle') return;
+                $('ea-progress-phase').textContent = d.phase || '…';
+                $('ea-progress-pct').textContent = d.pct + '%';
+                $('ea-progress-bar').style.width = d.pct + '%';
+                const detail = `Analysed: ${d.analysed}/${d.total} · Affected: ${d.affected} · Not affected: ${d.not_affected}`;
+                $('ea-progress-detail').textContent = detail;
+                $('ea-progress-alert').textContent = d.current_alert || '—';
+            } catch (_) { /* ignore poll errors */ }
+        }
+
+        async function _downloadFromUrl(url) {
+            const resp = await fetch(url);
+            if (!resp.ok) throw new Error('Download failed: ' + resp.statusText);
+            const blob = await resp.blob();
+            const cd = resp.headers.get('content-disposition') || '';
+            const fname = cd.match(/filename="([^"]+)"/)?.[1] || 'export-file';
+            _triggerDownload(blob, fname);
+        }
+
+        function _triggerDownload(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 5000);
+        }
+
+        // ── Import alerts from Excel ──────────────────────────────────────
+        let _importFile = null;
+
+        function onImportFileSelected(input) {
+            const btn = $('import-upload-btn');
+            const label = $('import-file-label');
+            if (input.files && input.files.length) {
+                _importFile = input.files[0];
+                label.textContent = '📄 ' + _importFile.name;
+                label.style.borderColor = '#818cf8';
+                label.style.color = '#a5b4fc';
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+            } else {
+                _importFile = null;
+                label.textContent = '📁 Click to select Excel file…';
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+            }
+            $('import-status').textContent = '';
+            const _impRes = $('import-results');
+            if (_impRes) _impRes.classList.add('hidden');
+            _showProgress(false);
+        }
+
+        // ── Import progress polling ──────────────────────────────────────
+        let _progressTimer = null;
+
+        function _showProgress(show) {
+            const wrap = $('import-progress-wrap');
+            if (show) wrap.classList.remove('hidden');
+            else wrap.classList.add('hidden');
+        }
+
+        function _renderProgress(p) {
+            const bar = $('import-progress-bar');
+            const pct = $('import-progress-pct');
+            const phase = $('import-progress-phase');
+            const detail = $('import-progress-detail');
+            const alert = $('import-progress-alert');
+            if (!bar) return;
+
+            bar.style.width = p.pct + '%';
+            pct.textContent = p.pct + '%';
+            phase.textContent = p.phase || '—';
+
+            const done = (p.analysed || 0) + (p.skipped_duplicates || 0);
+            const tot = p.total || 0;
+            let parts = [];
+            if (tot > 0) parts.push(`${done}/${tot} alerts`);
+            if (p.affected > 0) parts.push(`${p.affected} affected`);
+            if (p.not_affected > 0) parts.push(`${p.not_affected} not affected`);
+            if (p.errors > 0) parts.push(`${p.errors} err`);
+            detail.textContent = parts.length ? parts.join(' · ') : '—';
+
+            alert.textContent = p.current_alert || '—';
+
+            // Completed → green bar
+            if (p.phase === 'Completed') {
+                bar.style.background = 'linear-gradient(90deg,#22c55e,#4ade80)';
+            } else {
+                bar.style.background = 'linear-gradient(90deg,#6366f1,#818cf8)';
+            }
+        }
+
+        function _startProgressPolling() {
+            _showProgress(true);
+            _renderProgress({ pct: 0, phase: 'Uploading…', total: 0, analysed: 0, skipped_duplicates: 0, affected: 0, not_affected: 0, errors: 0, current_alert: '' });
+            _progressTimer = setInterval(async () => {
+                try {
+                    const r = await fetch('/api/v1/import/progress');
+                    if (r.ok) {
+                        const p = await r.json();
+                        _renderProgress(p);
+                    }
+                } catch (_) { /* ignore */ }
+            }, 600);
+        }
+
+        function _stopProgressPolling() {
+            if (_progressTimer) { clearInterval(_progressTimer); _progressTimer = null; }
+        }
+
+        async function importAlertsExcel() {
+            if (!_importFile) return;
+            const btn = $('import-upload-btn');
+            const statusEl = $('import-status');
+            btn.disabled = true;
+            btn.textContent = '⏳ Analysing…';
+            btn.style.opacity = '0.5';
+            statusEl.textContent = 'Uploading and analysing alerts — this may take a minute…';
+            statusEl.style.color = '#94a3b8';
+
+            _startProgressPolling();
+
+            const formData = new FormData();
+            formData.append('file', _importFile);
+
+            try {
+                const resp = await fetch('/api/v1/import/alerts-excel', {
+                    method: 'POST',
+                    body: formData,
+                });
+                const data = await resp.json();
+                if (!resp.ok) {
+                    throw new Error(data.error || data.detail || resp.statusText);
+                }
+
+                // Final progress render
+                _renderProgress({ pct: 100, phase: 'Completed', total: data.total_rows, analysed: data.processed, skipped_duplicates: data.skipped_duplicates, affected: data.affected, not_affected: data.not_affected, errors: data.errors, current_alert: '' });
+
+                statusEl.textContent = `✓ ${data.processed} / ${data.total_rows} alerts processed successfully`;
+                statusEl.style.color = '#4ade80';
+
+                if (data.skipped_duplicates > 0) {
+                    statusEl.textContent += ` — ${data.skipped_duplicates} duplicate${data.skipped_duplicates > 1 ? 's' : ''} skipped`;
+                }
+
+                if (data.errors > 0) {
+                    statusEl.textContent += ` (${data.errors} error${data.errors > 1 ? 's' : ''})`;
+                    statusEl.style.color = '#fbbf24';
+                }
+
+                // Refresh dashboard to show new data
+                setTimeout(() => refresh(), 500);
+
+            } catch (e) {
+                statusEl.textContent = '✗ ' + e.message;
+                statusEl.style.color = '#f87171';
+            } finally {
+                _stopProgressPolling();
+                btn.disabled = false;
+                btn.textContent = '▶ Upload & Analyse';
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+            }
+        }
+
+        // ── Keyboard shortcuts ────────────────────────────────────────────
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                closeDrilldown();
+                closeSettings();
+            }
+        });
+
+        // ── User badge / logout ─────────────────────────────────────────
+        async function loadUserBadge() {
+            try {
+                const resp = await fetch('/api/v1/me');
+                if (!resp.ok) {
+                    // No login session — treat as admin so Actions column is visible
+                    _isRepoAdmin = true;
+                    _updateActionsColumnVisibility();
+                    return;
+                }
+                const user = await resp.json();
+                const badge = $('user-badge');
+                const avatar = $('user-avatar');
+                const nameEl = $('user-name');
+                if (user.avatar_url) {
+                    avatar.src = user.avatar_url;
+                    avatar.style.display = '';
+                }
+                nameEl.textContent = user.username;
+                badge.style.display = 'flex';
+                // Set admin flag for Actions column visibility
+                _isRepoAdmin = !!user.is_repo_admin;
+                _updateActionsColumnVisibility();
+            } catch (_) {
+                // Network error — default to showing actions
+                _isRepoAdmin = true;
+                _updateActionsColumnVisibility();
+            }
+        }
+
+        async function doLogout() {
+            try {
+                await fetch('/api/v1/logout', { method: 'POST' });
+            } catch (_) { /* ignore */ }
+            window.location.href = '/login';
+        }
+
+        // ── Boot ─────────────────────────────────────────────────────────
+        loadUserBadge();
+        refresh();
+        setInterval(refresh, 30_000);
+    </script>
+</body>
+
+</html>
